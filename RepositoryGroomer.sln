@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RepositoryGroomer.Core", "RepositoryGroomer.Core\RepositoryGroomer.Core.csproj", "{E27678EF-7283-42ED-A07D-51A1CA57933A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RepositoryGroomer.TestConsole", "RepositoryGroomer.TestConsole\RepositoryGroomer.TestConsole.csproj", "{C0D31FDE-D74D-45CD-A162-056DC03DE45F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E27678EF-7283-42ED-A07D-51A1CA57933A}.Debug|x86.ActiveCfg = Debug|x86
+		{E27678EF-7283-42ED-A07D-51A1CA57933A}.Debug|x86.Build.0 = Debug|x86
+		{E27678EF-7283-42ED-A07D-51A1CA57933A}.Release|x86.ActiveCfg = Release|x86
+		{E27678EF-7283-42ED-A07D-51A1CA57933A}.Release|x86.Build.0 = Release|x86
+		{C0D31FDE-D74D-45CD-A162-056DC03DE45F}.Debug|x86.ActiveCfg = Debug|x86
+		{C0D31FDE-D74D-45CD-A162-056DC03DE45F}.Debug|x86.Build.0 = Debug|x86
+		{C0D31FDE-D74D-45CD-A162-056DC03DE45F}.Release|x86.ActiveCfg = Release|x86
+		{C0D31FDE-D74D-45CD-A162-056DC03DE45F}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
