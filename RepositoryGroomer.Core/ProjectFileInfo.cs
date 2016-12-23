@@ -9,6 +9,7 @@ namespace RepositoryGroomer.Core
 {
     public class ProjectFileInfo
     {
+        private const string CSPROJ_NAMESPACE = "http://schemas.microsoft.com/developer/msbuild/2003";
         private static readonly ILog Log = LogManager.GetLogger(typeof(ProjectFileInfo));
 
         public string FilePath { get; }
@@ -26,6 +27,7 @@ namespace RepositoryGroomer.Core
                 throw new ArgumentException($"Cannot create {nameof(ProjectFileInfo)} based on invalid file info.");
 
             FilePath = fi.FullName;
+            IsProjectFileValid = true;
             DirectoryPath = fi.DirectoryName;
             Links = new List<LinkedFileInfo>();
 
@@ -40,55 +42,23 @@ namespace RepositoryGroomer.Core
 
         private void ParseXml(string xmlContain)
         {
-            const string @namespace = "http://schemas.microsoft.com/developer/msbuild/2003";
             var xDoc = XDocument.Parse(xmlContain);
-            Links = xDoc.Descendants($"{{{@namespace}}}Link").Select(CreateLinkedFileInfo).ToList();
+            Links = xDoc.Descendants($"{{{CSPROJ_NAMESPACE}}}Link").Select(CreateLinkedFileInfo).ToList();
         }
 
         private LinkedFileInfo CreateLinkedFileInfo(XElement element)
         {
             if(element == null)
                 throw new ArgumentException($"Cannot create {nameof(LinkedFileInfo)} based on invalid xElement.");
+            var parent = element.Parent;
+            if(parent == null)
+                throw new ArgumentException($"Cannot create {nameof(LinkedFileInfo)} based on orphan xElement.");
 
-            var linkedFileRelativePath = element.Value;
-            var linkTagParentName = element.Parent?.Name;
-            return new LinkedFileInfo(DirectoryPath, linkedFileRelativePath, linkTagParentName?.LocalName);
+            var linkedFileRelativePath = parent.Attribute($"Include")?.Value;
+            var linkTagParentName = parent.Name.LocalName;
+            return new LinkedFileInfo(DirectoryPath, linkedFileRelativePath, linkTagParentName);
         }
-
-
-        /*
-         public AimirEvent(XElement e)
-        {
-            const string ns3 = "http://iec.ch/TC57/2011/EndDeviceEvents#";
-            EventType = e.Element($"{{{ns3}}}mRID")?.Value.Trim();
-            EventParsedType = AimirHesEventMapper.MapEventTypeToElinEventType(EventType);
-            MeterId = e.Element($"{{{ns3}}}Assets")?.Element($"{{{ns3}}}mRID")?.Value.Trim();
-            CreationDate = DateTime.SpecifyKind(DateTime.Parse(e.Element($"{{{ns3}}}createdDateTime")?.Value), DateTimeKind.Utc);//meters probably are sending time in UTC
-            DsoCode = e.Element($"{{{ns3}}}issuerID")?.Value;
-            MeterDbId = -1;
-            WasCreatedWhenMeterWasActive = false;
-            
-            if (ShouldContainFirmwareData)
-            {
-                var descendants = e.Descendants($"{{{ns3}}}EndDeviceEventDetails").ToArray();
-                var name = $"{{{ns3}}}name";
-                var firmwareID = descendants.SingleOrDefault(d => d.Element(name)?.Value == "firmwareID");
-                var terminalFwVersion = descendants.SingleOrDefault(d => d.Element(name)?.Value == "terminalFWVersion");
-                var terminalBuildNumber = descendants.SingleOrDefault(d => d.Element(name)?.Value == "terminalBuildNumber");
-                var terminalHwVersion = descendants.SingleOrDefault(d => d.Element(name)?.Value == "terminalHWVersion");
-
-                if (firmwareID != null && terminalFwVersion != null)
-                {
-                    var value = $"{{{ns3}}}value";
-                    FirmwareData = new AimirFirmwareData(
-                        firmwareID.Element(value)?.Value,
-                        terminalFwVersion.Element(value)?.Value,
-                        terminalBuildNumber?.Element(value)?.Value,
-                        terminalHwVersion?.Element(value)?.Value);
-                }
-            }
-        }
-         */
+        
     }
 
 }

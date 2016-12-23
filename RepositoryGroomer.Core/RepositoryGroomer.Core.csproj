@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="LinkedFileInfo.cs" />
+    <Compile Include="LinkTagTypes.cs" />
     <Compile Include="ProjectFileFinder.cs" />
     <Compile Include="ProjectFileInfo.cs" />
     <Compile Include="ProjectFileInfoProcessor.cs" />

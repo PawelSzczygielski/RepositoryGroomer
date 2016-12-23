@@ -6,7 +6,7 @@ namespace RepositoryGroomer.Core
     public class LinkedFileInfo
     {
         public string LinkedFileRelativePath { get; }
-        public string LinkTagParentName { get; set; }
+        public LinkTagTypes LinkTagType { get; set; }
 
         public bool IsLinkValid { get; }
 
@@ -15,9 +15,18 @@ namespace RepositoryGroomer.Core
         public LinkedFileInfo(string directoryWhereCsprojExists, string linkedFileRelativePath, string linkTagParentName)
         {
             LinkedFileRelativePath = linkedFileRelativePath;
-            LinkTagParentName = linkTagParentName;
+            LinkTagType = GetTagType(linkTagParentName);
             LinkedFileUnwrappedPath = UnwrapRelativePath(directoryWhereCsprojExists, LinkedFileRelativePath);
-            IsLinkValid = File.Exists(LinkedFileUnwrappedPath);
+            IsLinkValid = File.Exists(LinkedFileUnwrappedPath) && LinkTagType != LinkTagTypes.Unknown;
+        }
+
+        private static LinkTagTypes GetTagType(string linkTagParentName)
+        {
+            LinkTagTypes result;
+            if(Enum.TryParse(linkTagParentName, true, out result))
+                return result;
+
+            return LinkTagTypes.Unknown;
         }
 
         private static string UnwrapRelativePath(string directoryWhereCsprojExists, string linkedFileRelativePath)
