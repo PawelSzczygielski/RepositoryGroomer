@@ -36,5 +36,10 @@ namespace RepositoryGroomer.GUI
         {
             DialogResult result = folderBrowserDialogRepositoryPath.ShowDialog();
         }
+
+        private void searchLFbutton_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

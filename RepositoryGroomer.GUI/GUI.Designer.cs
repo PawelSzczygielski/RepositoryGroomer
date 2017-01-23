@@ -28,12 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem(new string[] {
-            "Sth1",
-            "Sth12",
-            "Sth12",
-            "",
-            ""}, -1);
             this.mainMenu = new System.Windows.Forms.MenuStrip();
             this.fileMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -42,20 +36,21 @@
             this.FeaturesTab = new System.Windows.Forms.TabControl();
             this.linkedFilesTab = new System.Windows.Forms.TabPage();
             this.LinkedFilesSettingsGroupBox = new System.Windows.Forms.GroupBox();
-            this.pathToRepositoryGB = new System.Windows.Forms.GroupBox();
+            this.fileFormatsGB = new System.Windows.Forms.GroupBox();
             this.fileTypesList = new System.Windows.Forms.CheckedListBox();
-            this.btnRepositoryPath = new System.Windows.Forms.Button();
+            this.pathToRepositoryGB = new System.Windows.Forms.GroupBox();
             this.textBoxPathToRepository = new System.Windows.Forms.TextBox();
-            this.linkedFilesListView = new System.Windows.Forms.ListView();
+            this.btnRepositoryPath = new System.Windows.Forms.Button();
             this.repositoryGroomerTab = new System.Windows.Forms.TabPage();
             this.folderBrowserDialogRepositoryPath = new System.Windows.Forms.FolderBrowserDialog();
-            this.fileFormatsGB = new System.Windows.Forms.GroupBox();
+            this.linkedFilesTreeView = new System.Windows.Forms.TreeView();
+            this.searchLFbutton = new System.Windows.Forms.Button();
             this.mainMenu.SuspendLayout();
             this.FeaturesTab.SuspendLayout();
             this.linkedFilesTab.SuspendLayout();
             this.LinkedFilesSettingsGroupBox.SuspendLayout();
-            this.pathToRepositoryGB.SuspendLayout();
             this.fileFormatsGB.SuspendLayout();
+            this.pathToRepositoryGB.SuspendLayout();
             this.SuspendLayout();
             // 
             // mainMenu
@@ -109,8 +104,8 @@
             // 
             // linkedFilesTab
             // 
+            this.linkedFilesTab.Controls.Add(this.linkedFilesTreeView);
             this.linkedFilesTab.Controls.Add(this.LinkedFilesSettingsGroupBox);
-            this.linkedFilesTab.Controls.Add(this.linkedFilesListView);
             this.linkedFilesTab.Location = new System.Drawing.Point(4, 22);
             this.linkedFilesTab.Name = "linkedFilesTab";
             this.linkedFilesTab.Padding = new System.Windows.Forms.Padding(3);
@@ -121,6 +116,7 @@
             // 
             // LinkedFilesSettingsGroupBox
             // 
+            this.LinkedFilesSettingsGroupBox.Controls.Add(this.searchLFbutton);
             this.LinkedFilesSettingsGroupBox.Controls.Add(this.fileFormatsGB);
             this.LinkedFilesSettingsGroupBox.Controls.Add(this.pathToRepositoryGB);
             this.LinkedFilesSettingsGroupBox.Location = new System.Drawing.Point(6, 3);
@@ -130,16 +126,15 @@
             this.LinkedFilesSettingsGroupBox.TabStop = false;
             this.LinkedFilesSettingsGroupBox.Text = "Settings";
             // 
-            // pathToRepositoryGB
+            // fileFormatsGB
             // 
-            this.pathToRepositoryGB.Controls.Add(this.textBoxPathToRepository);
-            this.pathToRepositoryGB.Controls.Add(this.btnRepositoryPath);
-            this.pathToRepositoryGB.Location = new System.Drawing.Point(6, 19);
-            this.pathToRepositoryGB.Name = "pathToRepositoryGB";
-            this.pathToRepositoryGB.Size = new System.Drawing.Size(187, 54);
-            this.pathToRepositoryGB.TabIndex = 4;
-            this.pathToRepositoryGB.TabStop = false;
-            this.pathToRepositoryGB.Text = "Path to repository";
+            this.fileFormatsGB.Controls.Add(this.fileTypesList);
+            this.fileFormatsGB.Location = new System.Drawing.Point(7, 80);
+            this.fileFormatsGB.Name = "fileFormatsGB";
+            this.fileFormatsGB.Size = new System.Drawing.Size(186, 60);
+            this.fileFormatsGB.TabIndex = 5;
+            this.fileFormatsGB.TabStop = false;
+            this.fileFormatsGB.Text = "File formats";
             // 
             // fileTypesList
             // 
@@ -159,6 +154,25 @@
             this.fileTypesList.TabIndex = 3;
             this.fileTypesList.Tag = "";
             // 
+            // pathToRepositoryGB
+            // 
+            this.pathToRepositoryGB.Controls.Add(this.textBoxPathToRepository);
+            this.pathToRepositoryGB.Controls.Add(this.btnRepositoryPath);
+            this.pathToRepositoryGB.Location = new System.Drawing.Point(6, 19);
+            this.pathToRepositoryGB.Name = "pathToRepositoryGB";
+            this.pathToRepositoryGB.Size = new System.Drawing.Size(187, 54);
+            this.pathToRepositoryGB.TabIndex = 4;
+            this.pathToRepositoryGB.TabStop = false;
+            this.pathToRepositoryGB.Text = "Path to repository";
+            // 
+            // textBoxPathToRepository
+            // 
+            this.textBoxPathToRepository.Location = new System.Drawing.Point(6, 19);
+            this.textBoxPathToRepository.Name = "textBoxPathToRepository";
+            this.textBoxPathToRepository.Size = new System.Drawing.Size(135, 20);
+            this.textBoxPathToRepository.TabIndex = 1;
+            this.textBoxPathToRepository.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+            // 
             // btnRepositoryPath
             // 
             this.btnRepositoryPath.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -169,26 +183,6 @@
             this.btnRepositoryPath.Text = "...";
             this.btnRepositoryPath.UseVisualStyleBackColor = true;
             this.btnRepositoryPath.Click += new System.EventHandler(this.btnRepositoryPath_Click);
-            // 
-            // textBoxPathToRepository
-            // 
-            this.textBoxPathToRepository.Location = new System.Drawing.Point(6, 19);
-            this.textBoxPathToRepository.Name = "textBoxPathToRepository";
-            this.textBoxPathToRepository.Size = new System.Drawing.Size(135, 20);
-            this.textBoxPathToRepository.TabIndex = 1;
-            this.textBoxPathToRepository.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
-            // 
-            // linkedFilesListView
-            // 
-            listViewItem1.Checked = true;
-            listViewItem1.StateImageIndex = 1;
-            this.linkedFilesListView.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem1});
-            this.linkedFilesListView.Location = new System.Drawing.Point(212, 7);
-            this.linkedFilesListView.Name = "linkedFilesListView";
-            this.linkedFilesListView.Size = new System.Drawing.Size(642, 411);
-            this.linkedFilesListView.TabIndex = 0;
-            this.linkedFilesListView.UseCompatibleStateImageBehavior = false;
             // 
             // repositoryGroomerTab
             // 
@@ -204,15 +198,22 @@
             // 
             this.folderBrowserDialogRepositoryPath.SelectedPath = "C:\\";
             // 
-            // fileFormatsGB
+            // linkedFilesTreeView
             // 
-            this.fileFormatsGB.Controls.Add(this.fileTypesList);
-            this.fileFormatsGB.Location = new System.Drawing.Point(7, 80);
-            this.fileFormatsGB.Name = "fileFormatsGB";
-            this.fileFormatsGB.Size = new System.Drawing.Size(186, 60);
-            this.fileFormatsGB.TabIndex = 5;
-            this.fileFormatsGB.TabStop = false;
-            this.fileFormatsGB.Text = "File formats";
+            this.linkedFilesTreeView.Location = new System.Drawing.Point(213, 7);
+            this.linkedFilesTreeView.Name = "linkedFilesTreeView";
+            this.linkedFilesTreeView.Size = new System.Drawing.Size(636, 411);
+            this.linkedFilesTreeView.TabIndex = 3;
+            // 
+            // searchLFbutton
+            // 
+            this.searchLFbutton.Location = new System.Drawing.Point(13, 147);
+            this.searchLFbutton.Name = "searchLFbutton";
+            this.searchLFbutton.Size = new System.Drawing.Size(174, 23);
+            this.searchLFbutton.TabIndex = 6;
+            this.searchLFbutton.Text = "Search";
+            this.searchLFbutton.UseVisualStyleBackColor = true;
+            this.searchLFbutton.Click += new System.EventHandler(this.searchLFbutton_Click);
             // 
             // GUI
             // 
@@ -230,9 +231,9 @@
             this.FeaturesTab.ResumeLayout(false);
             this.linkedFilesTab.ResumeLayout(false);
             this.LinkedFilesSettingsGroupBox.ResumeLayout(false);
+            this.fileFormatsGB.ResumeLayout(false);
             this.pathToRepositoryGB.ResumeLayout(false);
             this.pathToRepositoryGB.PerformLayout();
-            this.fileFormatsGB.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -248,7 +249,6 @@
         private System.Windows.Forms.TabControl FeaturesTab;
         private System.Windows.Forms.TabPage linkedFilesTab;
         private System.Windows.Forms.TabPage repositoryGroomerTab;
-        private System.Windows.Forms.ListView linkedFilesListView;
         private System.Windows.Forms.GroupBox LinkedFilesSettingsGroupBox;
         private System.Windows.Forms.TextBox textBoxPathToRepository;
         private System.Windows.Forms.Button btnRepositoryPath;
@@ -256,6 +256,8 @@
         private System.Windows.Forms.GroupBox pathToRepositoryGB;
         private System.Windows.Forms.CheckedListBox fileTypesList;
         private System.Windows.Forms.GroupBox fileFormatsGB;
+        private System.Windows.Forms.TreeView linkedFilesTreeView;
+        private System.Windows.Forms.Button searchLFbutton;
     }
 }
 
