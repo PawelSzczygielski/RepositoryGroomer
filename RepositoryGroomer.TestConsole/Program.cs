@@ -10,7 +10,7 @@ namespace RepositoryGroomer.TestConsole
         {
 
             var fileFinder = new ProjectFileFinder();
-            var allProjects = fileFinder.GetAllProjects(@"C:\ElinGit\Powel.Elin");
+            var allProjects = fileFinder.GetAllProjects(@"C:\Projects\Powel.Elin");
 
 
             Console.WriteLine($"Total number of csproj: {allProjects.Count}");
