@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Windows;
-using MahApps.Metro.Controls;
+﻿using System.Windows;
 
 namespace RepositoryGroomer.Modern
 {
@@ -8,7 +6,7 @@ namespace RepositoryGroomer.Modern
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindowView : MetroWindow
+    public partial class MainWindowView : Window
     {
         public MainWindowView()
         {
