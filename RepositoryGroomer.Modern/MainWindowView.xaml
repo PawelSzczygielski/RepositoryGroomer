@@ -81,7 +81,7 @@
                             </HierarchicalDataTemplate>
                         </TreeView.ItemTemplate>
                     </TreeView>
-                    <TextBlock Grid.Row="1" Text="Total number of projects: {Binding TotalNumberOfProjects}"></TextBlock>
+                    <TextBlock Grid.Row="1">Total number of projects: <TextBlock Text="{Binding TotalNumberOfProjects}" /></TextBlock>
                 </Grid>
             </TabItem>
             <TabItem Header="Others" />
