@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Configuration;
-using System.Data;
-using System.Drawing;
+using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using RepositoryGroomer.Core;
 using RepositoryGroomer.GUI.Properties;
 
 namespace RepositoryGroomer.GUI
@@ -39,7 +34,16 @@ namespace RepositoryGroomer.GUI
 
         private void searchLFbutton_Click(object sender, EventArgs e)
         {
+            var projectFileFinder = new ProjectFileFinder();
+            var foundProjects = projectFileFinder.GetAllProjects(textBoxPathToRepository.Text);
+            var linkedProjects = new ObservableCollection<ProjectFileInfo>(foundProjects.Where(x => x.Links.Any()));
 
+            linkedFilesTreeView.Nodes.AddRange(linkedProjects.Select(p=>
+            {
+                var node = new TreeNode(p.Name);
+                node.Nodes.AddRange(p.Links.Select(l=>new TreeNode(l.LinkedFileRelativePath)).ToArray());
+                return node;
+            }).ToArray());
         }
     }
 }

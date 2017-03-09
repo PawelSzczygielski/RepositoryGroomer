@@ -20,6 +20,7 @@ namespace RepositoryGroomer.Core
         public List<LinkedFileInfo> Links { get; private set; }
 
         public bool IsProjectFileValid { get; }
+        public string Name { get; private set; }
 
         public ProjectFileInfo(FileInfo fi)
         {
@@ -29,6 +30,7 @@ namespace RepositoryGroomer.Core
             FilePath = fi.FullName;
             IsProjectFileValid = true;
             DirectoryPath = fi.DirectoryName;
+            Name = fi.Name.Replace(fi.Extension, string.Empty);
             Links = new List<LinkedFileInfo>();
 
             XmlContain = File.ReadAllText(FilePath);
