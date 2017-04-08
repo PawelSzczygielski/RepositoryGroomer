@@ -12,8 +12,18 @@
         <modern:MainWindowViewModel/>
     </Window.DataContext>
     <Window.Resources>
+        <Style x:Key="ProjectInfoStyle" TargetType="Grid">           
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=IsProjectFileValid}" Value="True">
+                    <Setter Property="Background" Value="Green" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=IsProjectFileValid}" Value="False">
+                    <Setter Property="Background" Value="Red" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
         <DataTemplate x:Key="ProjectInfoTemplate" DataType="core:ProjectFileInfo">
-            <Grid>
+            <Grid Style="{StaticResource ProjectInfoStyle}" >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition></ColumnDefinition>
                     <ColumnDefinition></ColumnDefinition>
@@ -24,8 +34,8 @@
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Column="0" Grid.Row="0" Text="Name: " />
                 <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding Name}" />
-                <TextBlock Grid.Column="0" Grid.Row="1" Text="File path: " />
-                <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding FilePath}" />
+                <TextBlock Grid.Column="0" Grid.Row="1" Text="Directory path: " />
+                <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding DirectoryPath}" />
             </Grid>
         </DataTemplate>
     </Window.Resources>
