@@ -4,16 +4,35 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:modern="clr-namespace:RepositoryGroomer.Modern"
+        xmlns:core="clr-namespace:RepositoryGroomer.Core"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         mc:Ignorable="d"
         Title="MainWindowView" Height="350" Width="525">
     <Window.DataContext>
         <modern:MainWindowViewModel/>
     </Window.DataContext>
+    <Window.Resources>
+        <DataTemplate x:Key="ProjectInfoTemplate" DataType="core:ProjectFileInfo">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Column="0" Grid.Row="0" Text="Name: " />
+                <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding Name}" />
+                <TextBlock Grid.Column="0" Grid.Row="1" Text="File path: " />
+                <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding FilePath}" />
+            </Grid>
+        </DataTemplate>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
@@ -22,7 +41,7 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <Label Grid.Column="0" Content="Code repository location: " Margin="5"/>
+            <TextBlock Grid.Column="0" Margin="5">Code repository location:</TextBlock>
             <TextBox Grid.Column="1" Margin="5" Text="{Binding SearchPath}"/>
             <Button Grid.Column="2" Content="..." Width="30" Margin="5" Command="{Binding ChangeSearchPathCommand}"/>
         </Grid>
@@ -31,57 +50,15 @@
             <TabItem Header="Projects with links">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"></RowDefinition>
-                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="9*"></RowDefinition>
+                        <RowDefinition Height="1*"></RowDefinition>
                     </Grid.RowDefinitions>
-                    <TreeView Grid.Row="0" ItemsSource="{Binding Projects}">
-                        <!--<i:Interaction.Behaviors><Behaviors:TreeViewSelectedItemBehavior SelectedItem="{Binding SelectedItem,UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" /></i:Interaction.Behaviors>-->
-                        <TreeView.ItemContainerStyle>
-                            <Style TargetType="{x:Type TreeViewItem}">
-                                <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
-                                <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
-                                <Setter Property="FontWeight" Value="Normal" />
-                                <Style.Triggers>
-                                    <Trigger Property="IsSelected" Value="True">
-                                        <Setter Property="FontWeight" Value="Bold" />
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </TreeView.ItemContainerStyle>
-                        <TreeView.ItemTemplate>
-                            <HierarchicalDataTemplate>
-                                <TreeViewItem  ItemsSource="{Binding Links}">
-                                    <TreeViewItem.Header>
-                                        <Grid Width="350">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="*"></ColumnDefinition>
-                                                <ColumnDefinition Width="*"></ColumnDefinition>
-                                                <ColumnDefinition Width="*"></ColumnDefinition>
-                                            </Grid.ColumnDefinitions>
-                                            <TextBlock Text="{Binding FilePath}" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="0"/>
-                                            <TextBlock Text="{Binding DirectoryPath}" Margin="10,0,10,0" HorizontalAlignment="Left" VerticalAlignment="Center"  Grid.Column="1"/>
-                                            <TextBlock Text="{Binding IsProjectFileValid}" HorizontalAlignment="Left"  VerticalAlignment="Center"  Grid.Column="2"/>
-                                        </Grid>
-                                    </TreeViewItem.Header>
-                                    <TreeViewItem.ItemTemplate>
-                                        <DataTemplate>
-                                            <Grid Margin="-20,0,0,0">
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="AUto"></ColumnDefinition>
-                                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
-                                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
-                                                </Grid.ColumnDefinitions>
-                                                <!--<TextBlock Text="{Binding Name}" Margin="10,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="0"/>-->
-                                                <TextBlock Text="{Binding LinkedFileUnwrappedPath}" Margin="10,0,10,0" HorizontalAlignment="Left" VerticalAlignment="Center"  Grid.Column="1"/>
-                                                <TextBlock Text="{Binding IsLinkValid}" HorizontalAlignment="Left" VerticalAlignment="Center"  Grid.Column="2"/>
-                                            </Grid>
-                                        </DataTemplate>
-                                    </TreeViewItem.ItemTemplate>
-                                </TreeViewItem>
-                            </HierarchicalDataTemplate>
-                        </TreeView.ItemTemplate>
-                    </TreeView>
-                    <TextBlock Grid.Row="1">Total number of projects: <TextBlock Text="{Binding TotalNumberOfProjects}" /></TextBlock>
+                    <ListView Grid.Row="0" ItemsSource="{Binding Projects}" ItemTemplate="{StaticResource ProjectInfoTemplate}" />
+                    <StackPanel Grid.Row="1">
+                        <TextBlock>Total number of projects: <TextBlock Text="{Binding TotalNumberOfProjects}" /></TextBlock>
+                        <TextBlock>Number of incorrect projects: <TextBlock Text="{Binding TotalNumberOfIncorrectProjects}" /></TextBlock>
+                    </StackPanel>
+
                 </Grid>
             </TabItem>
             <TabItem Header="Others" />
