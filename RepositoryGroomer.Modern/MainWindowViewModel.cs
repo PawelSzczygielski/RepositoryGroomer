@@ -13,6 +13,7 @@ namespace RepositoryGroomer.Modern
     {
         private string _searchPath;
         private int _totalNumberOfProjects;
+        private int _totalNumberOfIncorrectProjects;
         private ObservableCollection<ProjectFileInfo> _projects;
 
         public ObservableCollection<ProjectFileInfo> Projects
@@ -32,6 +33,17 @@ namespace RepositoryGroomer.Modern
             set
             {
                 if (value == _totalNumberOfProjects) return;
+                _totalNumberOfProjects = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public int TotalNumberOfIncorrectProjects
+        {
+            get { return _totalNumberOfIncorrectProjects; }
+            set
+            {
+                if (value == _totalNumberOfIncorrectProjects) return;
                 _totalNumberOfProjects = value;
                 OnPropertyChanged();
             }
