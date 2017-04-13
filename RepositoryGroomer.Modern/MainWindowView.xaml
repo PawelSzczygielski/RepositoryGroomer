@@ -4,16 +4,15 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:modern="clr-namespace:RepositoryGroomer.Modern"
-        xmlns:core="clr-namespace:RepositoryGroomer.Core"
-        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:core="clr-namespace:RepositoryGroomer.Core;assembly=RepositoryGroomer.Core"
         mc:Ignorable="d"
         Title="MainWindowView" Height="350" Width="525">
     <Window.DataContext>
         <modern:MainWindowViewModel/>
     </Window.DataContext>
     <Window.Resources>
-        <Style x:Key="ProjectInfoStyle" TargetType="Grid">           
-            <Style.Triggers>
+        <Style x:Key="ProjectInfoGridStyle" TargetType="Grid">
+            <!--<Style.Triggers>
                 <DataTrigger Binding="{Binding Path=IsProjectFileValid}" Value="True">
                     <Setter Property="Background" Value="Green" />
                 </DataTrigger>
@@ -21,25 +20,28 @@
                     <Setter Property="Background" Value="Red" />
                 </DataTrigger>
             </Style.Triggers>
+            <Setter Property="ShowGridLines" Value="True" />-->
         </Style>
         <DataTemplate x:Key="ProjectInfoTemplate" DataType="core:ProjectFileInfo">
-            <Grid Style="{StaticResource ProjectInfoStyle}" >
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                </Grid.RowDefinitions>
-                <TextBlock Grid.Column="0" Grid.Row="0" Text="Name: " />
-                <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding Name}" />
-                <TextBlock Grid.Column="0" Grid.Row="1" Text="Directory path: " />
-                <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding DirectoryPath}" />
-            </Grid>
+            <Border BorderBrush="#FF66B6A0" BorderThickness="1">
+                <Grid Style="{StaticResource ProjectInfoGridStyle}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Column="0" Grid.Row="0" Text="Name: " Margin="2" />
+                    <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding Name}"  Margin="2" />
+                    <TextBlock Grid.Column="0" Grid.Row="1" Text="Directory path: "  Margin="2" />
+                    <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding DirectoryPath}"  Margin="2" />
+                </Grid>
+            </Border>
         </DataTemplate>
     </Window.Resources>
-    <Grid>
+    <Grid ShowGridLines="True">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -60,17 +62,27 @@
             <TabItem Header="Projects with links">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="9*"></RowDefinition>
-                        <RowDefinition Height="1*"></RowDefinition>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <ListView Grid.Row="0" ItemsSource="{Binding Projects}" ItemTemplate="{StaticResource ProjectInfoTemplate}" />
+
+                    <ListView ItemsSource="{Binding Projects}" ItemTemplate="{StaticResource ProjectInfoTemplate}" HorizontalContentAlignment="Stretch">
+                        <ListView.Template>
+                            <ControlTemplate TargetType="ListView">
+                                <ScrollViewer VerticalScrollBarVisibility="Visible">
+                                    <ItemsPresenter Margin="5"/>
+                                </ScrollViewer>
+                            </ControlTemplate>
+                        </ListView.Template>
+                    </ListView>
+                    
                     <StackPanel Grid.Row="1">
                         <TextBlock>Total number of projects: <TextBlock Text="{Binding TotalNumberOfProjects}" /></TextBlock>
                         <TextBlock>Number of incorrect projects: <TextBlock Text="{Binding TotalNumberOfIncorrectProjects}" /></TextBlock>
                     </StackPanel>
-
                 </Grid>
             </TabItem>
+
             <TabItem Header="Others" />
         </TabControl>
     </Grid>
