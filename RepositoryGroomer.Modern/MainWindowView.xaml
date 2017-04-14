@@ -69,7 +69,7 @@
                     <ListView ItemsSource="{Binding Projects}" ItemTemplate="{StaticResource ProjectInfoTemplate}" HorizontalContentAlignment="Stretch">
                         <ListView.Template>
                             <ControlTemplate TargetType="ListView">
-                                <ScrollViewer VerticalScrollBarVisibility="Visible">
+                                <ScrollViewer VerticalScrollBarVisibility="Visible" Height="700">
                                     <ItemsPresenter Margin="5"/>
                                 </ScrollViewer>
                             </ControlTemplate>
