@@ -13,7 +13,7 @@ namespace RepositoryGroomer.Modern
     {
         private string _searchPath;
         private int _totalNumberOfProjects;
-        private int _totalNumberOfIncorrectProjects;
+        private int _totalNumberOfProjectsWithLinkedFiles;
         private ObservableCollection<ProjectFileInfo> _projects;
 
         public ObservableCollection<ProjectFileInfo> Projects
@@ -38,13 +38,13 @@ namespace RepositoryGroomer.Modern
             }
         }
 
-        public int TotalNumberOfIncorrectProjects
+        public int TotalNumberOfProjectsWithLinkedFiles
         {
-            get { return _totalNumberOfIncorrectProjects; }
+            get { return _totalNumberOfProjectsWithLinkedFiles; }
             set
             {
-                if (value == _totalNumberOfIncorrectProjects) return;
-                _totalNumberOfProjects = value;
+                if (value == _totalNumberOfProjectsWithLinkedFiles) return;
+                _totalNumberOfProjectsWithLinkedFiles = value;
                 OnPropertyChanged();
             }
         }
@@ -87,6 +87,7 @@ namespace RepositoryGroomer.Modern
             var foundProjects = projectFileFinder.GetAllProjects(SearchPath);
             Projects = new ObservableCollection<ProjectFileInfo>(foundProjects.Where(x => x.Links.Any()));
             TotalNumberOfProjects = foundProjects.Count;
+            TotalNumberOfProjectsWithLinkedFiles = Projects.Count;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -6,7 +6,9 @@
         xmlns:modern="clr-namespace:RepositoryGroomer.Modern"
         xmlns:core="clr-namespace:RepositoryGroomer.Core;assembly=RepositoryGroomer.Core"
         mc:Ignorable="d"
-        Title="MainWindowView" Height="350" Width="525">
+        Title="MainWindowView"
+        WindowState="Normal" ResizeMode="NoResize"
+        Height="550" Width="1025">
     <Window.DataContext>
         <modern:MainWindowViewModel/>
     </Window.DataContext>
@@ -62,24 +64,33 @@
             <TabItem Header="Projects with links">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="600"/>
                     </Grid.RowDefinitions>
 
-                    <ListView ItemsSource="{Binding Projects}" ItemTemplate="{StaticResource ProjectInfoTemplate}" HorizontalContentAlignment="Stretch">
-                        <ListView.Template>
-                            <ControlTemplate TargetType="ListView">
-                                <ScrollViewer VerticalScrollBarVisibility="Visible" Height="700">
-                                    <ItemsPresenter Margin="5"/>
-                                </ScrollViewer>
-                            </ControlTemplate>
-                        </ListView.Template>
-                    </ListView>
-                    
-                    <StackPanel Grid.Row="1">
+                    <StackPanel Grid.Row="0">
                         <TextBlock>Total number of projects: <TextBlock Text="{Binding TotalNumberOfProjects}" /></TextBlock>
-                        <TextBlock>Number of incorrect projects: <TextBlock Text="{Binding TotalNumberOfIncorrectProjects}" /></TextBlock>
+                        <TextBlock>Number of projects with links: <TextBlock Text="{Binding TotalNumberOfProjectsWithLinkedFiles}" /></TextBlock>
                     </StackPanel>
+
+                    <ListView Grid.Row="1" Name="ProjectList"
+                                  ItemsSource="{Binding Projects}"
+                                  ItemTemplate="{StaticResource ProjectInfoTemplate}"
+                                  VerticalAlignment="Stretch"
+                                  HorizontalContentAlignment="Stretch"
+                                  ScrollViewer.CanContentScroll="True"
+                                  ScrollViewer.VerticalScrollBarVisibility="Visible"
+                                  Height="{Binding RelativeSource={RelativeSource FindAncestor,
+                                             AncestorType={x:Type Grid}},
+                                             Path=RowDefinitions[1].ActualHeight}">
+                            <ListView.Template>
+                                <ControlTemplate>
+                                    <ScrollViewer>
+                                        <ItemsPresenter></ItemsPresenter>
+                                    </ScrollViewer>
+                                </ControlTemplate>
+                            </ListView.Template>
+                        </ListView>
                 </Grid>
             </TabItem>
 
