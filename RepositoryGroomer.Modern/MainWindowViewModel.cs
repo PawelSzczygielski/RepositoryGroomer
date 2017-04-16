@@ -6,10 +6,11 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using RepositoryGroomer.Core;
 using RepositoryGroomer.Modern.Annotations;
+using Caliburn.Micro;
 
 namespace RepositoryGroomer.Modern
 {
-    public class MainWindowViewModel : INotifyPropertyChanged
+    public class MainWindowViewModel : PropertyChangedBase
     {
         private string _searchPath;
         private int _totalNumberOfProjects;
@@ -23,7 +24,7 @@ namespace RepositoryGroomer.Modern
             {
                 if (Equals(value, _projects)) return;
                 _projects = value;
-                OnPropertyChanged();
+                NotifyOfPropertyChange(() => Projects);
             }
         }
 
@@ -34,7 +35,7 @@ namespace RepositoryGroomer.Modern
             {
                 if (value == _totalNumberOfProjects) return;
                 _totalNumberOfProjects = value;
-                OnPropertyChanged();
+                NotifyOfPropertyChange(() => TotalNumberOfProjects);
             }
         }
 
@@ -45,7 +46,7 @@ namespace RepositoryGroomer.Modern
             {
                 if (value == _totalNumberOfProjectsWithLinkedFiles) return;
                 _totalNumberOfProjectsWithLinkedFiles = value;
-                OnPropertyChanged();
+                NotifyOfPropertyChange(() => TotalNumberOfProjectsWithLinkedFiles);
             }
         }
 
@@ -56,16 +57,12 @@ namespace RepositoryGroomer.Modern
             {
                 if (value == _searchPath) return;
                 _searchPath = value;
-                OnPropertyChanged();
+                NotifyOfPropertyChange(() => SearchPath);
             }
         }
 
-        public ConcreteCommand ChangeSearchPathCommand { get; set; }
-
         public MainWindowViewModel()
         {
-            ChangeSearchPathCommand = new ConcreteCommand(ShowFolderDialogAndReloadProjects);
-
             SearchPath = ConfigurationManager.AppSettings.Get(nameof(SearchPath));
             if (Directory.Exists(SearchPath))
                 ReloadProjects();
@@ -75,11 +72,11 @@ namespace RepositoryGroomer.Modern
             }
         }
 
-        private void ShowFolderDialogAndReloadProjects()
+        [CaliburnMicroActionTarget]
+        public void SearchPathChanged()
         {
-            
+           
         }
-
 
         private void ReloadProjects()
         {
@@ -88,14 +85,6 @@ namespace RepositoryGroomer.Modern
             Projects = new ObservableCollection<ProjectFileInfo>(foundProjects.Where(x => x.Links.Any()));
             TotalNumberOfProjects = foundProjects.Count;
             TotalNumberOfProjectsWithLinkedFiles = Projects.Count;
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
