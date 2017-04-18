@@ -37,9 +37,9 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <TextBlock Grid.Column="0" Grid.Row="0" Text="Name: " Margin="2" />
-                    <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding Name}"  Margin="2" />
-                    <TextBlock Grid.Column="0" Grid.Row="1" Text="Directory path: "  Margin="2" />
-                    <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding DirectoryPath}"  Margin="2" />
+                    <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding ProjectName}" Margin="2" />
+                    <TextBlock Grid.Column="0" Grid.Row="1" Text="Directory path: " Margin="2" />
+                    <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding ContainingDirectoryPath}" Margin="2" />
                 </Grid>
             </Border>
         </DataTemplate>

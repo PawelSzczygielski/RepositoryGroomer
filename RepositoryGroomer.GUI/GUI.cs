@@ -40,7 +40,7 @@ namespace RepositoryGroomer.GUI
 
             linkedFilesTreeView.Nodes.AddRange(linkedProjects.Select(p=>
             {
-                var node = new TreeNode(p.Name);
+                var node = new TreeNode(p.ProjectName);
                 node.Nodes.AddRange(p.Links.Select(l=>new TreeNode(l.LinkedFileRelativePath)).ToArray());
                 return node;
             }).ToArray());

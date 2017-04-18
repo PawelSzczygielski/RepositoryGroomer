@@ -16,7 +16,7 @@ namespace RepositoryGroomer.TestConsole
             Console.WriteLine($"Total number of csproj: {allProjects.Count}");
             Console.WriteLine($"Total number of links: {allProjects.SelectMany(x => x.Links).Count()}");
             allProjects.SelectMany(x => x.Links)
-                .Where(l => !l.IsLinkValid)
+                .Where(l => !l.TargetLinkedFileExists)
                 .ToList()
                 .ForEach(x => Console.WriteLine(x.LinkedFileUnwrappedPath));
 

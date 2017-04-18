@@ -1,66 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Linq;
-using log4net;
 
 namespace RepositoryGroomer.Core
 {
     public class ProjectFileInfo
     {
-        private const string CSPROJ_NAMESPACE = "http://schemas.microsoft.com/developer/msbuild/2003";
-        private static readonly ILog Log = LogManager.GetLogger(typeof(ProjectFileInfo));
+        public string ProjectName { get; }
+        public string ProjectFilePath { get; }
+        public string ContainingDirectoryPath { get; }
+        public List<LinkedFileInfo> Links { get; }
+        public bool IsProjectFileWithLinks => Links.Any();
+        public bool IsProjectFileXmlCorrect { get; }
 
-        public string FilePath { get; }
-        public string DirectoryPath { get; }
-
-        public string XmlContain { get; set; }
-
-        public List<LinkedFileInfo> Links { get; private set; }
-
-        public bool IsProjectFileValid { get; }
-        public string Name { get; private set; }
-
-        public ProjectFileInfo(FileInfo fi)
+        public ProjectFileInfo(
+            string projectFilePath,
+            string containingDirectoryPath,
+            string projectName,
+            List<LinkedFileInfo> links,
+            bool projectFileValid)
         {
-            if(fi == null)
-                throw new ArgumentException($"Cannot create {nameof(ProjectFileInfo)} based on invalid file info.");
-
-            FilePath = fi.FullName;
-            IsProjectFileValid = true;
-            DirectoryPath = fi.DirectoryName;
-            Name = fi.Name.Replace(fi.Extension, string.Empty);
-            Links = new List<LinkedFileInfo>();
-
-            XmlContain = File.ReadAllText(FilePath);
-            if (string.IsNullOrEmpty(XmlContain))
-            {
-                IsProjectFileValid = false;
-                Log.Error($"Project file '{FilePath}' is an empty file.");
-            }
-            ParseXml(XmlContain);
+            ProjectFilePath = projectFilePath;
+            ContainingDirectoryPath = containingDirectoryPath;
+            ProjectName = projectName;
+            Links = links;
+            IsProjectFileXmlCorrect = projectFileValid;
         }
-
-        private void ParseXml(string xmlContain)
-        {
-            var xDoc = XDocument.Parse(xmlContain);
-            Links = xDoc.Descendants($"{{{CSPROJ_NAMESPACE}}}Link").Select(CreateLinkedFileInfo).ToList();
-        }
-
-        private LinkedFileInfo CreateLinkedFileInfo(XElement element)
-        {
-            if(element == null)
-                throw new ArgumentException($"Cannot create {nameof(LinkedFileInfo)} based on invalid xElement.");
-            var parent = element.Parent;
-            if(parent == null)
-                throw new ArgumentException($"Cannot create {nameof(LinkedFileInfo)} based on orphan xElement.");
-
-            var linkedFileRelativePath = parent.Attribute($"Include")?.Value;
-            var linkTagParentName = parent.Name.LocalName;
-            return new LinkedFileInfo(DirectoryPath, linkedFileRelativePath, linkTagParentName);
-        }
-        
     }
-
 }

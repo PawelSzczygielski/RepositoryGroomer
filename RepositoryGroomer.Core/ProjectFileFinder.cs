@@ -35,7 +35,7 @@ namespace RepositoryGroomer.Core
             try
             {
                 var filesInsideDirectory = folderToSearch.GetFiles(SEARCH_PATTERN);
-                foundFiles.AddRange(filesInsideDirectory.Select(fi => new ProjectFileInfo(fi)));
+                foundFiles.AddRange(filesInsideDirectory.Select(fi => ProjectFileInfoBuilder.Build(fi)));
             }
             catch (PathTooLongException ptlex)
             {
