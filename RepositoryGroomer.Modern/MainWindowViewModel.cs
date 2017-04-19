@@ -1,6 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using System.Configuration;
-using System.IO;
 using System.Linq;
 using RepositoryGroomer.Core;
 using Caliburn.Micro;
@@ -13,6 +11,8 @@ namespace RepositoryGroomer.Modern
         private int _totalNumberOfProjects;
         private int _totalNumberOfProjectsWithLinkedFiles;
         private ObservableCollection<ProjectFileInfo> _projects;
+        private readonly IAmConfigurationProvider _configurationProvider;
+        private readonly IAmProjectFileFinder _projectFileFinder;
 
         public ObservableCollection<ProjectFileInfo> Projects
         {
@@ -58,30 +58,26 @@ namespace RepositoryGroomer.Modern
             }
         }
 
-        public MainWindowViewModel()
+        public MainWindowViewModel(IAmConfigurationProvider configurationProvider, IAmProjectFileFinder projectFileFinder)
         {
-            SearchPath = ConfigurationManager.AppSettings.Get(nameof(SearchPath));
-            if (Directory.Exists(SearchPath))
-                ReloadProjects();
-            else
-            {
-                //TODO: then what?
-            }
+            _configurationProvider = configurationProvider;
+            _projectFileFinder = projectFileFinder;
+
+            SearchPath = _configurationProvider.SearchPath;
+            ReloadProjects();
+        }
+
+        private void ReloadProjects()
+        {
+            Projects = new ObservableCollection<ProjectFileInfo>(_projectFileFinder.GetAllProjects(SearchPath));
+            TotalNumberOfProjects = Projects.Count;
+            TotalNumberOfProjectsWithLinkedFiles = Projects.Count(proj=>proj.IsProjectFileWithLinks);
         }
 
         [CaliburnMicroActionTarget]
         public void SearchPathChanged()
         {
-           
-        }
-
-        private void ReloadProjects()
-        {
-            var projectFileFinder = new ProjectFileFinder();
-            var foundProjects = projectFileFinder.GetAllProjects(SearchPath);
-            Projects = new ObservableCollection<ProjectFileInfo>(foundProjects.Where(x => x.Links.Any()));
-            TotalNumberOfProjects = foundProjects.Count;
-            TotalNumberOfProjectsWithLinkedFiles = Projects.Count;
+            ReloadProjects();
         }
     }
 }

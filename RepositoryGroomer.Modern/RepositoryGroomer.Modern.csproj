@@ -86,6 +86,7 @@
     </Compile>
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="CaliburnMicroActionTargetAttribute.cs" />
+    <Compile Include="ConfigurationProvider.cs" />
     <Compile Include="MainWindowView.xaml.cs">
       <DependentUpon>MainWindowView.xaml</DependentUpon>
       <SubType>Code</SubType>

@@ -6,12 +6,12 @@ using log4net;
 
 namespace RepositoryGroomer.Core
 {
-    public interface IProjectFileFinder
+    public interface IAmProjectFileFinder
     {
-        
+        List<ProjectFileInfo> GetAllProjects(string folderPath);
     }
 
-    public class ProjectFileFinder : IProjectFileFinder
+    public class ProjectFileFinder : IAmProjectFileFinder
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(ProjectFileFinder));
         private const string SEARCH_PATTERN = "*.csproj";
