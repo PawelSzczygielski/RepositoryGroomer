@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Moq;
 using NUnit.Framework;
 using RepositoryGroomer.Core;
@@ -71,5 +72,19 @@ namespace RepositoryGroomer.Modern.Tests
 
             Assert.That(viewModel.TotalNumberOfProjects, Is.EqualTo(1));
         }
+
+        [Test]
+        public void FilterCheckbox_Changes_Visibility_Of_Linked_And_All_Projects()
+        {
+            var viewModel= new MainWindowViewModel(_configurationProvider.Object, _projectFileFinder.Object);
+            Assert.That(viewModel.Projects.OfType<ProjectFileInfo>().Count(), Is.EqualTo(2));
+
+            viewModel.FilterProjectsByLinks();
+            Assert.That(viewModel.Projects.OfType<ProjectFileInfo>().Count(), Is.EqualTo(1));
+
+            viewModel.DisableProjectsFiltering();
+            Assert.That(viewModel.Projects.OfType<ProjectFileInfo>().Count(), Is.EqualTo(2));
+        }
+        
     }
 }

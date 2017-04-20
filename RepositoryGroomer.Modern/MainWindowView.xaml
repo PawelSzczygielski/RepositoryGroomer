@@ -10,6 +10,17 @@
         WindowState="Normal" ResizeMode="NoResize"
         Height="550" Width="1025">
     <Window.Resources>
+        <Style x:Key="CheckboxWithLabel" TargetType="CheckBox">
+            <Style.Resources>
+                <Style TargetType="Path">
+                    <Setter Property="FlowDirection" Value="LeftToRight" />
+                </Style>
+                <Style TargetType="TextBlock">
+                    <Setter Property="FlowDirection" Value="LeftToRight" />
+                </Style>
+            </Style.Resources>
+            <Setter Property="FlowDirection" Value="RightToLeft" />
+        </Style>
         <Style x:Key="ProjectInfoGridStyle" TargetType="Grid">
             <!--<Style.Triggers>
                 <DataTrigger Binding="{Binding Path=IsProjectFileValid}" Value="True">
@@ -40,6 +51,7 @@
             </Border>
         </DataTemplate>
     </Window.Resources>
+
     <Grid ShowGridLines="True">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -58,21 +70,25 @@
                     cal:Message.Attach="[Event Click] = [Action SearchPathChanged]"/>
         </Grid>
 
-        <TabControl Grid.Row="1" >
-            <TabItem Header="Projects with links">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="600"/>
-                    </Grid.RowDefinitions>
 
-                    <StackPanel Grid.Row="0">
-                        <TextBlock>Total number of projects: <TextBlock Text="{Binding TotalNumberOfProjects}" /></TextBlock>
-                        <TextBlock>Number of projects with links: <TextBlock Text="{Binding TotalNumberOfProjectsWithLinkedFiles}" /></TextBlock>
-                    </StackPanel>
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="600"/>
+            </Grid.RowDefinitions>
 
-                    <ListView Grid.Row="1" Name="ProjectList"
-                                  ItemsSource="{Binding Projects}"
+            <StackPanel Grid.Row="0">
+                <TextBlock>Total number of projects: <TextBlock Text="{Binding TotalNumberOfProjects}" /></TextBlock>
+                <TextBlock>Number of projects with links: <TextBlock Text="{Binding TotalNumberOfProjectsWithLinkedFiles}" /></TextBlock>
+                <CheckBox HorizontalAlignment="Left" 
+                          Style="{StaticResource CheckboxWithLabel}" 
+                          Content=":Show only linked projects"
+                          cal:Message.Attach=
+                          "[Event Checked] = [Action FilterProjectsByLinks];
+                          [Event Unchecked] = [Action DisableProjectsFiltering]"/>
+            </StackPanel>
+
+            <ListView Grid.Row="1" ItemsSource="{Binding Projects}"
                                   ItemTemplate="{StaticResource ProjectInfoTemplate}"
                                   VerticalAlignment="Stretch"
                                   HorizontalContentAlignment="Stretch"
@@ -81,18 +97,14 @@
                                   Height="{Binding RelativeSource={RelativeSource FindAncestor,
                                              AncestorType={x:Type Grid}},
                                              Path=RowDefinitions[1].ActualHeight}">
-                            <ListView.Template>
-                                <ControlTemplate>
-                                    <ScrollViewer>
-                                        <ItemsPresenter></ItemsPresenter>
-                                    </ScrollViewer>
-                                </ControlTemplate>
-                            </ListView.Template>
-                        </ListView>
-                </Grid>
-            </TabItem>
-
-            <TabItem Header="Others" />
-        </TabControl>
+                <ListView.Template>
+                    <ControlTemplate>
+                        <ScrollViewer>
+                            <ItemsPresenter></ItemsPresenter>
+                        </ScrollViewer>
+                    </ControlTemplate>
+                </ListView.Template>
+            </ListView>
+        </Grid>
     </Grid>
 </Window>

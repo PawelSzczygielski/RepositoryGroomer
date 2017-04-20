@@ -1,5 +1,9 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.ComponentModel;
 using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
 using RepositoryGroomer.Core;
 using Caliburn.Micro;
 
@@ -10,20 +14,10 @@ namespace RepositoryGroomer.Modern
         private string _searchPath;
         private int _totalNumberOfProjects;
         private int _totalNumberOfProjectsWithLinkedFiles;
-        private ObservableCollection<ProjectFileInfo> _projects;
         private readonly IAmConfigurationProvider _configurationProvider;
         private readonly IAmProjectFileFinder _projectFileFinder;
 
-        public ObservableCollection<ProjectFileInfo> Projects
-        {
-            get { return _projects; }
-            set
-            {
-                if (Equals(value, _projects)) return;
-                _projects = value;
-                NotifyOfPropertyChange(() => Projects);
-            }
-        }
+        public ICollectionView Projects { get; set; }
 
         public int TotalNumberOfProjects
         {
@@ -69,15 +63,36 @@ namespace RepositoryGroomer.Modern
 
         private void ReloadProjects()
         {
-            Projects = new ObservableCollection<ProjectFileInfo>(_projectFileFinder.GetAllProjects(SearchPath));
-            TotalNumberOfProjects = Projects.Count;
-            TotalNumberOfProjectsWithLinkedFiles = Projects.Count(proj=>proj.IsProjectFileWithLinks);
+            var projects = _projectFileFinder.GetAllProjects(SearchPath);
+            TotalNumberOfProjects = projects.Count;
+            TotalNumberOfProjectsWithLinkedFiles = projects.Count(proj => proj.IsProjectFileWithLinks);
+
+            Projects = CollectionViewSource.GetDefaultView(projects);
         }
 
         [CaliburnMicroActionTarget]
         public void SearchPathChanged()
         {
             ReloadProjects();
+        }
+
+        [CaliburnMicroActionTarget]
+        public void FilterProjectsByLinks()
+        {
+            var predicate = new Predicate<object>(bj =>
+            {
+                var projFileInfo = bj as ProjectFileInfo;
+                if (projFileInfo == null)
+                    return false;
+                return projFileInfo.IsProjectFileWithLinks;
+            });
+            Projects.Filter = predicate;
+        }
+
+        [CaliburnMicroActionTarget]
+        public void DisableProjectsFiltering()
+        {
+            Projects.Filter = null;
         }
     }
 }
