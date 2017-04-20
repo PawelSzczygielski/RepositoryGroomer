@@ -3,16 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:modern="clr-namespace:RepositoryGroomer.Modern"
         xmlns:core="clr-namespace:RepositoryGroomer.Core;assembly=RepositoryGroomer.Core"
         xmlns:cal="http://www.caliburnproject.org" 
         mc:Ignorable="d"
         Title="MainWindowView"
         WindowState="Normal" ResizeMode="NoResize"
         Height="550" Width="1025">
-    <Window.DataContext>
-        <modern:MainWindowViewModel/>
-    </Window.DataContext>
     <Window.Resources>
         <Style x:Key="ProjectInfoGridStyle" TargetType="Grid">
             <!--<Style.Triggers>
