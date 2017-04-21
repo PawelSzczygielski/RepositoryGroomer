@@ -5,6 +5,7 @@ namespace RepositoryGroomer.Core
 {
     public class ProjectFileInfo
     {
+        public List<Reference> References { get; }
         public string ProjectName { get; }
         public string ProjectFilePath { get; }
         public string ContainingDirectoryPath { get; }
@@ -17,12 +18,14 @@ namespace RepositoryGroomer.Core
             string containingDirectoryPath,
             string projectName,
             List<LinkedFileInfo> links,
+            List<Reference> references,
             bool projectFileValid)
         {
             ProjectFilePath = projectFilePath;
             ContainingDirectoryPath = containingDirectoryPath;
             ProjectName = projectName;
             Links = links;
+            References = references;
             IsProjectFileXmlCorrect = projectFileValid;
         }
     }

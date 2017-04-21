@@ -1,5 +1,8 @@
-﻿namespace RepositoryGroomer.Core
+﻿using System.Diagnostics;
+
+namespace RepositoryGroomer.Core
 {
+    [DebuggerDisplay("{" + nameof(LinkedFileUnwrappedPath) + "} | {" + nameof(TargetLinkedFileExists) + "}")]
     public class LinkedFileInfo
     {
         public string LinkedFileRelativePath { get; }

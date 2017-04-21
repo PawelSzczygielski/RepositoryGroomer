@@ -26,12 +26,40 @@ namespace RepositoryGroomer.Core
             string projectFileXmlContain)
         {
             List<LinkedFileInfo> links;
-            var parsingSucceed = TryExtractLinks(out links, projectFileXmlContain, containingDirectoryPath);
-            var fileInfoCorrect = parsingSucceed && !string.IsNullOrWhiteSpace(projectFilePath) &&
+            var parsingLinksSucceed = TryExtractLinks(out links, projectFileXmlContain, containingDirectoryPath);
+
+            List<Reference> references;
+            var parsingReferencesSucceeded = TryExtractReferences(out references, projectFileXmlContain,
+                containingDirectoryPath);
+
+
+            var fileInfoCorrect = parsingLinksSucceed &&
+                                  parsingReferencesSucceeded && 
+                                  !string.IsNullOrWhiteSpace(projectFilePath) &&
                                   !string.IsNullOrWhiteSpace(containingDirectoryPath) &&
                                   !string.IsNullOrWhiteSpace(projectName);
 
-            return new ProjectFileInfo(projectFilePath, containingDirectoryPath, projectName, links, fileInfoCorrect);
+            return new ProjectFileInfo(projectFilePath, containingDirectoryPath, projectName, links, references, fileInfoCorrect);
+        }
+
+        private static bool TryExtractReferences(out List<Reference> references, string projectFileXml,
+            string containingDirectoryPath)
+        {
+            try
+            {
+                var xDoc = XDocument.Parse(projectFileXml);
+                references = xDoc
+                    .Descendants($"{{{CSPROJ_NAMESPACE}}}Reference")
+                    .Select(xElement => CreateReference(xElement, containingDirectoryPath))
+                    .ToList();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Log.Error($"Unable to parse project file from {containingDirectoryPath}", ex);
+                references = new List<Reference>();
+                return false;
+            }
         }
 
         private static bool TryExtractLinks(out List<LinkedFileInfo> links, string projectFileXml, string containingDirectoryPath)
@@ -52,7 +80,22 @@ namespace RepositoryGroomer.Core
                 return false;
             }
         }
-        
+
+        private static Reference CreateReference(XElement element, string containingDirectoryPath)
+        {
+            var parent = element?.Parent;
+            if (parent == null)
+                return new Reference();
+
+            var include = element.Attribute("Include")?.Value;
+            var hintPath = element.Element($"{{{CSPROJ_NAMESPACE}}}HintPath")?.Value;
+            var unwrappedHintPath = UnwrapRelativePath(containingDirectoryPath, hintPath);
+            var embedInteropTypes = element.Element($"{{{CSPROJ_NAMESPACE}}}EmbedInteropTypes").ToNullableBool();
+            var specificVersion = element.Element($"{{{CSPROJ_NAMESPACE}}}SpecificVersion").ToNullableBool();
+            var @private = element.Element($"{{{CSPROJ_NAMESPACE}}}Private").ToNullableBool();
+            return new Reference(include, hintPath, unwrappedHintPath, embedInteropTypes, specificVersion, @private);
+        }
+
         private static LinkedFileInfo CreateLinkedFileInfo(XElement element, string containingDirectoryPath)
         {
             var parent = element?.Parent;

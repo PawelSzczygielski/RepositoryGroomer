@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Linq;
+using NUnit.Framework;
 using RepositoryGroomer.Core.Tests.Properties;
 
 namespace RepositoryGroomer.Core.Tests
@@ -62,11 +63,41 @@ namespace RepositoryGroomer.Core.Tests
         {
             var projectFileXmlContain = Resources.ProjectXmlWithNonExistingLinkedFiles;
 
-            var projectFileInfo = ProjectFileInfoBuilder.Build("name1","name2", "name3", projectFileXmlContain);
+            var projectFileInfo = ProjectFileInfoBuilder.Build("name1", "name2", "name3", projectFileXmlContain);
 
             Assert.That(projectFileInfo.Links.Count, Is.EqualTo(3));
             Assert.That(projectFileInfo.IsProjectFileWithLinks, Is.True);
             Assert.That(projectFileInfo.IsProjectFileXmlCorrect, Is.True);
+        }
+
+        [Test]
+        public void Builder_Extracts_References()
+        {
+            var projectFileXmlContain = Resources.ProjectXmlWithReferences;
+            var projectFileInfo = ProjectFileInfoBuilder.Build("C:\\Repository\\Project.csproj", "C:\\Repository",
+                "Project", projectFileXmlContain);
+
+            Assert.That(projectFileInfo.References.Count, Is.EqualTo(9));
+        }
+
+        [Test]
+        public void Builder_Fills_Reference_Data()
+        {
+            var projectFileXmlContain = Resources.ProjectXmlWithReferences;
+            var projectFileInfo = ProjectFileInfoBuilder.Build("C:\\Repository\\Project.csproj", "C:\\Repository",
+                "Project", projectFileXmlContain);
+            var references = projectFileInfo.References;
+
+            Assert.That(references.All(reference => !string.IsNullOrWhiteSpace(reference.Include)));
+            Assert.That(references.Any(reference => !string.IsNullOrWhiteSpace(reference.HintPath)));
+            Assert.That(references.Any(reference => reference.EmbedInteropTypes.HasValue));
+            Assert.That(references.Any(reference => reference.SpecificVersion.HasValue));
+            Assert.That(references.Any(reference => reference.Private.HasValue));
+            Assert.That(
+                references.Where(reference => !string.IsNullOrWhiteSpace(reference.HintPath))
+                    .All(reference => !string.IsNullOrWhiteSpace(reference.UnwrappedHintPath)));
+            Assert.That(references.All(reference => reference.ReferenceEntryValid));
+
         }
     }
 }

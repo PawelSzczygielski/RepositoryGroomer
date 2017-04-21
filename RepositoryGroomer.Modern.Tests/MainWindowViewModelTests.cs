@@ -22,17 +22,17 @@ namespace RepositoryGroomer.Modern.Tests
             projectFileFinderMock.Setup(x => x.GetAllProjects("C:\\Repository"))
                 .Returns(() => new List<ProjectFileInfo>
                 {
-                    new ProjectFileInfo("ProjFilePath1", "DirPath1", "ProjectName1", new List<LinkedFileInfo>(),
+                    new ProjectFileInfo("ProjFilePath1", "DirPath1", "ProjectName1", new List<LinkedFileInfo>(), new List<Reference>(), 
                     true),
                     new ProjectFileInfo("ProjFilePath2", "DirPath2", "ProjectName2", new List<LinkedFileInfo>
                     {
                         new LinkedFileInfo("RelativePath2", LinkTagTypes.Compile, "UnwrappedPath2", true)
-                    }, true),
+                    }, new List<Reference>(), true),
 
                 });
             projectFileFinderMock.Setup(x => x.GetAllProjects("C:\\OtherRepository")).Returns(() => new List<ProjectFileInfo>
             {
-                new ProjectFileInfo("ProjFilePath3", "DirPath3", "ProjectName3", new List<LinkedFileInfo>(),
+                new ProjectFileInfo("ProjFilePath3", "DirPath3", "ProjectName3", new List<LinkedFileInfo>(), new List<Reference>(), 
                     true),
             });
 
@@ -85,6 +85,5 @@ namespace RepositoryGroomer.Modern.Tests
             viewModel.DisableProjectsFiltering();
             Assert.That(viewModel.Projects.OfType<ProjectFileInfo>().Count(), Is.EqualTo(2));
         }
-        
     }
 }
