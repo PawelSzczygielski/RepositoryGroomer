@@ -21,20 +21,9 @@
             </Style.Resources>
             <Setter Property="FlowDirection" Value="RightToLeft" />
         </Style>
-        <Style x:Key="ProjectInfoGridStyle" TargetType="Grid">
-            <!--<Style.Triggers>
-                <DataTrigger Binding="{Binding Path=IsProjectFileValid}" Value="True">
-                    <Setter Property="Background" Value="Green" />
-                </DataTrigger>
-                <DataTrigger Binding="{Binding Path=IsProjectFileValid}" Value="False">
-                    <Setter Property="Background" Value="Red" />
-                </DataTrigger>
-            </Style.Triggers>
-            <Setter Property="ShowGridLines" Value="True" />-->
-        </Style>
         <DataTemplate x:Key="ProjectInfoTemplate" DataType="core:ProjectFileInfo">
             <Border BorderBrush="#FF66B6A0" BorderThickness="1">
-                <Grid Style="{StaticResource ProjectInfoGridStyle}">
+                <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="Auto"/>
