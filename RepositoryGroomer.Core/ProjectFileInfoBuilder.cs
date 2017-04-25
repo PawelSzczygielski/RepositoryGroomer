@@ -25,12 +25,13 @@ namespace RepositoryGroomer.Core
         public static ProjectFileInfo Build(string projectFilePath, string containingDirectoryPath, string projectName,
             string projectFileXmlContain)
         {
+            var xDoc = XDocument.Parse(projectFileXmlContain);
+
             List<LinkedFileInfo> links;
-            var parsingLinksSucceed = TryExtractLinks(out links, projectFileXmlContain, containingDirectoryPath);
+            var parsingLinksSucceed = TryExtractLinks(out links, xDoc, containingDirectoryPath);
 
             List<Reference> references;
-            var parsingReferencesSucceeded = TryExtractReferences(out references, projectFileXmlContain,
-                containingDirectoryPath);
+            var parsingReferencesSucceeded = TryExtractReferences(out references, xDoc, containingDirectoryPath);
 
 
             var fileInfoCorrect = parsingLinksSucceed &&
@@ -42,12 +43,11 @@ namespace RepositoryGroomer.Core
             return new ProjectFileInfo(projectFilePath, containingDirectoryPath, projectName, links, references, fileInfoCorrect);
         }
 
-        private static bool TryExtractReferences(out List<Reference> references, string projectFileXml,
+        private static bool TryExtractReferences(out List<Reference> references, XDocument xDoc,
             string containingDirectoryPath)
         {
             try
             {
-                var xDoc = XDocument.Parse(projectFileXml);
                 references = xDoc
                     .Descendants($"{{{CSPROJ_NAMESPACE}}}Reference")
                     .Select(xElement => CreateReference(xElement, containingDirectoryPath))
@@ -62,11 +62,11 @@ namespace RepositoryGroomer.Core
             }
         }
 
-        private static bool TryExtractLinks(out List<LinkedFileInfo> links, string projectFileXml, string containingDirectoryPath)
+        private static bool TryExtractLinks(out List<LinkedFileInfo> links, XDocument xDoc, string containingDirectoryPath)
         {
             try
             {
-                var xDoc = XDocument.Parse(projectFileXml);
+                
                 links =
                     xDoc.Descendants($"{{{CSPROJ_NAMESPACE}}}Link")
                         .Select(xElement => CreateLinkedFileInfo(xElement, containingDirectoryPath))
@@ -89,7 +89,11 @@ namespace RepositoryGroomer.Core
 
             var include = element.Attribute("Include")?.Value;
             var hintPath = element.Element($"{{{CSPROJ_NAMESPACE}}}HintPath")?.Value;
-            var unwrappedHintPath = UnwrapRelativePath(containingDirectoryPath, hintPath);
+
+            var unwrappedHintPath = string.Empty;
+            if(!string.IsNullOrWhiteSpace(containingDirectoryPath) && !string.IsNullOrWhiteSpace(hintPath))
+                unwrappedHintPath = UnwrapRelativePath(containingDirectoryPath, hintPath);
+
             var embedInteropTypes = element.Element($"{{{CSPROJ_NAMESPACE}}}EmbedInteropTypes").ToNullableBool();
             var specificVersion = element.Element($"{{{CSPROJ_NAMESPACE}}}SpecificVersion").ToNullableBool();
             var @private = element.Element($"{{{CSPROJ_NAMESPACE}}}Private").ToNullableBool();

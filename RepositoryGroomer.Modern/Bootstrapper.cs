@@ -17,6 +17,8 @@ namespace RepositoryGroomer.Modern
         
         protected override void Configure()
         {
+            log4net.Config.XmlConfigurator.Configure();
+
             _container.Singleton<IWindowManager, WindowManager>();
             _container.Singleton<IEventAggregator, EventAggregator>();
             _container.Singleton<IAmConfigurationProvider, ConfigurationProvider>();
