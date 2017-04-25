@@ -74,15 +74,12 @@ namespace RepositoryGroomer.Modern.Tests
         }
 
         [Test]
-        public void FilterCheckbox_Changes_Visibility_Of_Linked_And_All_Projects()
+        public void FilterCheckbox_Changes_Filtering_Of_ProjectsCollection()
         {
             var viewModel= new MainWindowViewModel(_configurationProvider.Object, _projectFileFinder.Object);
-            Assert.That(viewModel.Projects.OfType<ProjectFileInfo>().Count(), Is.EqualTo(2));
-
-            viewModel.FilterProjectsByLinks();
             Assert.That(viewModel.Projects.OfType<ProjectFileInfo>().Count(), Is.EqualTo(1));
 
-            viewModel.DisableProjectsFiltering();
+            viewModel.ShowOnlyLinkedProjects = false;
             Assert.That(viewModel.Projects.OfType<ProjectFileInfo>().Count(), Is.EqualTo(2));
         }
     }

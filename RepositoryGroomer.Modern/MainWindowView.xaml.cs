@@ -11,7 +11,6 @@ namespace RepositoryGroomer.Modern
         public MainWindowView()
         {
             InitializeComponent();
-            
         }
     }
 }

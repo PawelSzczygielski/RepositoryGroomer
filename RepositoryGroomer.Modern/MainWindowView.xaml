@@ -10,6 +10,7 @@
         WindowState="Normal" ResizeMode="NoResize"
         Height="550" Width="1025">
     <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
         <Style x:Key="CheckboxWithLabel" TargetType="CheckBox">
             <Style.Resources>
                 <Style TargetType="Path">
@@ -31,11 +32,20 @@
                     <Grid.RowDefinitions>
                         <RowDefinition/>
                         <RowDefinition/>
+                        <RowDefinition/>
                     </Grid.RowDefinitions>
                     <TextBlock Grid.Column="0" Grid.Row="0" Text="Name: " Margin="2" />
                     <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding ProjectName}" Margin="2" />
                     <TextBlock Grid.Column="0" Grid.Row="1" Text="Directory path: " Margin="2" />
                     <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding ContainingDirectoryPath}" Margin="2" />
+                    <TextBlock Grid.Column="0" Grid.Row="2" Text="Links: " Margin="2" Visibility="{Binding IsProjectFileWithLinks, Converter={StaticResource BoolToVisibility}}"/>
+                    <ListView Grid.Column="1" Grid.Row="2" ItemsSource="{Binding Links}" Visibility="{Binding IsProjectFileWithLinks, Converter={StaticResource BoolToVisibility}}">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding LinkedFileUnwrappedPath}" />
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
                 </Grid>
             </Border>
         </DataTemplate>
@@ -59,7 +69,6 @@
                     cal:Message.Attach="[Event Click] = [Action SearchPathChanged]"/>
         </Grid>
 
-
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
@@ -69,12 +78,10 @@
             <StackPanel Grid.Row="0">
                 <TextBlock>Total number of projects: <TextBlock Text="{Binding TotalNumberOfProjects}" /></TextBlock>
                 <TextBlock>Number of projects with links: <TextBlock Text="{Binding TotalNumberOfProjectsWithLinkedFiles}" /></TextBlock>
-                <CheckBox HorizontalAlignment="Left" 
-                          Style="{StaticResource CheckboxWithLabel}" 
-                          Content=":Show only linked projects"
-                          cal:Message.Attach=
-                          "[Event Checked] = [Action FilterProjectsByLinks];
-                          [Event Unchecked] = [Action DisableProjectsFiltering]"/>
+                <CheckBox HorizontalAlignment="Left"
+                          Style="{StaticResource CheckboxWithLabel}"
+                          IsChecked="{Binding ShowOnlyLinkedProjects}"
+                          Content=":Show only linked projects" />
             </StackPanel>
 
             <ListView Grid.Row="1" ItemsSource="{Binding Projects}"

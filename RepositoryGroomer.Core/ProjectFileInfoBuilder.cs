@@ -25,7 +25,16 @@ namespace RepositoryGroomer.Core
         public static ProjectFileInfo Build(string projectFilePath, string containingDirectoryPath, string projectName,
             string projectFileXmlContain)
         {
-            var xDoc = XDocument.Parse(projectFileXmlContain);
+            XDocument xDoc;
+            try
+            {
+                 xDoc = XDocument.Parse(projectFileXmlContain);
+            }
+            catch (Exception ex)
+            {
+                Log.Error("Cannot parse csproj's xml contain.", ex);
+                return new ProjectFileInfo(projectFilePath, containingDirectoryPath, projectName, new List<LinkedFileInfo>(), new List<Reference>(), false);
+            }
 
             List<LinkedFileInfo> links;
             var parsingLinksSucceed = TryExtractLinks(out links, xDoc, containingDirectoryPath);

@@ -12,6 +12,7 @@ namespace RepositoryGroomer.Modern
         private string _searchPath;
         private int _totalNumberOfProjects;
         private int _totalNumberOfProjectsWithLinkedFiles;
+        private bool _showOnlyLinkedProjects;
         private readonly IAmConfigurationProvider _configurationProvider;
         private readonly IAmProjectFileFinder _projectFileFinder;
 
@@ -27,7 +28,21 @@ namespace RepositoryGroomer.Modern
                 NotifyOfPropertyChange(() => TotalNumberOfProjects);
             }
         }
+        
+        public bool ShowOnlyLinkedProjects
+        {
+            get { return _showOnlyLinkedProjects; }
+            set
+            {
+                if (value == _showOnlyLinkedProjects)
+                    return;
 
+                _showOnlyLinkedProjects = value;
+                NotifyOfPropertyChange(() => ShowOnlyLinkedProjects);
+                ChangeProjectFilter();
+            }
+        }
+        
         public int TotalNumberOfProjectsWithLinkedFiles
         {
             get { return _totalNumberOfProjectsWithLinkedFiles; }
@@ -57,6 +72,7 @@ namespace RepositoryGroomer.Modern
 
             SearchPath = _configurationProvider.SearchPath;
             ReloadProjects();
+            ShowOnlyLinkedProjects = true;
         }
 
         private void ReloadProjects()
@@ -74,8 +90,7 @@ namespace RepositoryGroomer.Modern
             ReloadProjects();
         }
 
-        [CaliburnMicroActionTarget]
-        public void FilterProjectsByLinks()
+        private void FilterProjectsByLinks()
         {
             var predicate = new Predicate<object>(bj =>
             {
@@ -87,10 +102,18 @@ namespace RepositoryGroomer.Modern
             Projects.Filter = predicate;
         }
 
-        [CaliburnMicroActionTarget]
-        public void DisableProjectsFiltering()
+        private void DontFilterProjects()
         {
             Projects.Filter = null;
         }
+
+        private void ChangeProjectFilter()
+        {
+            if (ShowOnlyLinkedProjects)
+                FilterProjectsByLinks();
+            else
+                DontFilterProjects();
+        }
+
     }
 }
