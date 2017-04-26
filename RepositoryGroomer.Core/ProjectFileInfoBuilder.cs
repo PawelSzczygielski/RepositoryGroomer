@@ -119,7 +119,7 @@ namespace RepositoryGroomer.Core
             var linkTagParentName = parent.Name.LocalName;
             var linkTagType = GetTagType(linkTagParentName);
             var linkedFileUnwrappedPath = UnwrapRelativePath(containingDirectoryPath, linkedFileRelativePath);
-            var targetLinkedFileExists = File.Exists(linkedFileUnwrappedPath) && linkTagType != LinkTagTypes.Unknown;
+            var targetLinkedFileExists = File.Exists(linkedFileUnwrappedPath);
 
             return new LinkedFileInfo(linkedFileRelativePath, linkTagType, linkedFileUnwrappedPath,
                 targetLinkedFileExists);

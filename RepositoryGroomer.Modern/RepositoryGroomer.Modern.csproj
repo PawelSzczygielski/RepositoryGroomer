@@ -82,6 +82,7 @@
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="CaliburnMicroActionTargetAttribute.cs" />
     <Compile Include="ConfigurationProvider.cs" />
+    <Compile Include="CustomBooleanToVisibilityConverter.cs" />
     <Compile Include="MainWindowView.xaml.cs">
       <DependentUpon>MainWindowView.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -122,6 +123,9 @@
       <Project>{e27678ef-7283-42ed-a07d-51a1ca57933a}</Project>
       <Name>RepositoryGroomer.Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\broken-link-16.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
