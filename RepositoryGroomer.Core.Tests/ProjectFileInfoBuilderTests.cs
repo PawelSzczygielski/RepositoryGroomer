@@ -96,8 +96,6 @@ namespace RepositoryGroomer.Core.Tests
             Assert.That(
                 references.Where(reference => !string.IsNullOrWhiteSpace(reference.HintPath))
                     .All(reference => !string.IsNullOrWhiteSpace(reference.UnwrappedHintPath)));
-            Assert.That(references.All(reference => reference.ReferenceEntryValid));
-
         }
     }
 }

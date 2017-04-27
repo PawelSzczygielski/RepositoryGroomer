@@ -22,12 +22,12 @@ namespace RepositoryGroomer.Modern.Tests
             projectFileFinderMock.Setup(x => x.GetAllProjects("C:\\Repository"))
                 .Returns(() => new List<ProjectFileInfo>
                 {
-                    new ProjectFileInfo("ProjFilePath1", "DirPath1", "ProjectName1", new List<LinkedFileInfo>(), new List<Reference>(), 
+                    new ProjectFileInfo("ProjFilePath1", "DirPath1", "ProjectName1", new List<LinkedFileInfo>(), new List<Reference> {new Reference("Include", "HintPath", "UnwrappedHintPath")}, 
                     true),
                     new ProjectFileInfo("ProjFilePath2", "DirPath2", "ProjectName2", new List<LinkedFileInfo>
                     {
                         new LinkedFileInfo("RelativePath2", LinkTagTypes.Compile, "UnwrappedPath2", true)
-                    }, new List<Reference>(), true),
+                    }, new List<Reference> {new Reference("Include", "HintPath", string.Empty)}, true),
 
                 });
             projectFileFinderMock.Setup(x => x.GetAllProjects("C:\\OtherRepository")).Returns(() => new List<ProjectFileInfo>
@@ -81,6 +81,13 @@ namespace RepositoryGroomer.Modern.Tests
 
             viewModel.ShowOnlyLinkedProjects = false;
             Assert.That(viewModel.Projects.OfType<ProjectFileInfo>().Count(), Is.EqualTo(2));
+        }
+
+        [Test]
+        public void TotalNumberOfProjectsWithInvalidReferences_Is_Filled_Correctly()
+        {
+            var viewModel = new MainWindowViewModel(_configurationProvider.Object, _projectFileFinder.Object);
+            Assert.That(viewModel.TotalNumberOfProjectsWithInvalidReferences, Is.EqualTo(1));
         }
     }
 }

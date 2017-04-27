@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.IO;
 
 namespace RepositoryGroomer.Core
 {
@@ -14,25 +15,24 @@ namespace RepositoryGroomer.Core
             EmbedInteropTypes = embedInteropTypes;
             SpecificVersion = specificVersion;
             Private = @private;
+            ReferenceEntryValid = CheckTarget();
+        }
+
+        private bool CheckTarget()
+        {
+            var includeValid = !string.IsNullOrWhiteSpace(Include);
+
+            if (string.IsNullOrWhiteSpace(HintPath))
+                return includeValid;
+
+            return includeValid && File.Exists(UnwrappedHintPath);
         }
 
         public Reference()
         {
         }
 
-        public bool ReferenceEntryValid
-        {
-            get
-            {
-                var includeValid = !string.IsNullOrWhiteSpace(Include);
-
-                if (string.IsNullOrWhiteSpace(HintPath))
-                    return includeValid;
-
-                return includeValid && !string.IsNullOrWhiteSpace(UnwrappedHintPath);
-            } //TODO: Possible place for validation rules Only Include is needed in order to be valid?
-        }
-
+        public bool ReferenceEntryValid { get; } //TODO: Possible place for validation rules Only Include is needed in order to be valid?
         public string Include { get; }
         public bool? EmbedInteropTypes { get; }
         public bool? SpecificVersion { get; }

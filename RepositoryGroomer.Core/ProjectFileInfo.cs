@@ -11,6 +11,7 @@ namespace RepositoryGroomer.Core
         public string ContainingDirectoryPath { get; }
         public List<LinkedFileInfo> Links { get; }
         public bool IsProjectFileWithLinks => Links.Any();
+        public bool ProjectFileContainsInvalidReferences => References.Any(reference => !reference.ReferenceEntryValid);
         public bool IsProjectFileXmlCorrect { get; }
 
         public ProjectFileInfo(

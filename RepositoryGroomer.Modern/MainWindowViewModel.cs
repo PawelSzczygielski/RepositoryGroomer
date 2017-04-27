@@ -15,6 +15,7 @@ namespace RepositoryGroomer.Modern
         private bool _showOnlyLinkedProjects;
         private readonly IAmConfigurationProvider _configurationProvider;
         private readonly IAmProjectFileFinder _projectFileFinder;
+        private int _totalNumberOfProjectsWithInvalidReferences;
 
         public ICollectionView Projects { get; set; }
 
@@ -28,7 +29,7 @@ namespace RepositoryGroomer.Modern
                 NotifyOfPropertyChange(() => TotalNumberOfProjects);
             }
         }
-        
+
         public bool ShowOnlyLinkedProjects
         {
             get { return _showOnlyLinkedProjects; }
@@ -42,7 +43,7 @@ namespace RepositoryGroomer.Modern
                 ChangeProjectFilter();
             }
         }
-        
+
         public int TotalNumberOfProjectsWithLinkedFiles
         {
             get { return _totalNumberOfProjectsWithLinkedFiles; }
@@ -51,6 +52,19 @@ namespace RepositoryGroomer.Modern
                 if (value == _totalNumberOfProjectsWithLinkedFiles) return;
                 _totalNumberOfProjectsWithLinkedFiles = value;
                 NotifyOfPropertyChange(() => TotalNumberOfProjectsWithLinkedFiles);
+            }
+        }
+
+        public int TotalNumberOfProjectsWithInvalidReferences
+        {
+            get { return _totalNumberOfProjectsWithInvalidReferences; }
+            set
+            {
+                if (value == _totalNumberOfProjectsWithInvalidReferences)
+                    return;
+
+                _totalNumberOfProjectsWithInvalidReferences = value;
+                NotifyOfPropertyChange(() => TotalNumberOfProjectsWithInvalidReferences);
             }
         }
 
@@ -80,6 +94,7 @@ namespace RepositoryGroomer.Modern
             var projects = _projectFileFinder.GetAllProjects(SearchPath);
             TotalNumberOfProjects = projects.Count;
             TotalNumberOfProjectsWithLinkedFiles = projects.Count(proj => proj.IsProjectFileWithLinks);
+            TotalNumberOfProjectsWithInvalidReferences = projects.Count(proj => proj.ProjectFileContainsInvalidReferences);
 
             Projects = CollectionViewSource.GetDefaultView(projects);
         }

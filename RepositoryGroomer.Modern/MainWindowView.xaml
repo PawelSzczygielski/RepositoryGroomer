@@ -8,7 +8,7 @@
         xmlns:modern="clr-namespace:RepositoryGroomer.Modern"
         mc:Ignorable="d"
         Title="MainWindowView"
-        WindowState="Normal" ResizeMode="NoResize"
+        WindowState="Normal" ResizeMode="CanResize"
         Height="550" Width="1025">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
@@ -52,7 +52,17 @@
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
-                    
+                    <TextBlock Grid.Column="0" Grid.Row="3" Text="Invalid References: " Margin="2" Visibility="{Binding ProjectFileContainsInvalidReferences, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    <ListView Grid.Column="1" Grid.Row="3" ItemsSource="{Binding References}" Visibility="{Binding ProjectFileContainsInvalidReferences, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding ReferenceEntryValid, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                    <Image Source="Resources/broken-link-16.png" />
+                                    <TextBlock Text="{Binding UnwrappedHintPath}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
                 </Grid>
             </Border>
         </DataTemplate>
@@ -85,6 +95,7 @@
             <StackPanel Grid.Row="0">
                 <TextBlock>Total number of projects: <TextBlock Text="{Binding TotalNumberOfProjects}" /></TextBlock>
                 <TextBlock>Number of projects with links: <TextBlock Text="{Binding TotalNumberOfProjectsWithLinkedFiles}" /></TextBlock>
+                <TextBlock>Number of projects with invalid references: <TextBlock Text="{Binding TotalNumberOfProjectsWithInvalidReferences}" /></TextBlock>
                 <CheckBox HorizontalAlignment="Left"
                           Style="{StaticResource CheckboxWithLabel}"
                           IsChecked="{Binding ShowOnlyLinkedProjects}"
