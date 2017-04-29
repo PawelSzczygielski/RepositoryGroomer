@@ -6,7 +6,7 @@ namespace RepositoryGroomer.Core
     [DebuggerDisplay("{" + nameof(Include) + "} | {" + nameof(ReferenceEntryValid) + "}")]
     public class Reference
     {
-        public Reference(string include, string hintPath = null, string unwrappedHintPath = null, bool? embedInteropTypes = null, bool? specificVersion = null,
+        public Reference(bool referenceEntryValid, string include, string hintPath = null, string unwrappedHintPath = null, bool? embedInteropTypes = null, bool? specificVersion = null,
             bool? @private = null)
         {
             Include = include;
@@ -15,19 +15,9 @@ namespace RepositoryGroomer.Core
             EmbedInteropTypes = embedInteropTypes;
             SpecificVersion = specificVersion;
             Private = @private;
-            ReferenceEntryValid = CheckTarget();
+            ReferenceEntryValid = referenceEntryValid;
         }
-
-        private bool CheckTarget()
-        {
-            var includeValid = !string.IsNullOrWhiteSpace(Include);
-
-            if (string.IsNullOrWhiteSpace(HintPath))
-                return includeValid;
-
-            return includeValid && File.Exists(UnwrappedHintPath);
-        }
-
+        
         public Reference()
         {
         }

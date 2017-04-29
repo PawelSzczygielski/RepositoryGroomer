@@ -7,6 +7,7 @@ using Caliburn.Micro;
 
 namespace RepositoryGroomer.Modern
 {
+   
     public class MainWindowViewModel : PropertyChangedBase
     {
         private string _searchPath;
@@ -16,6 +17,9 @@ namespace RepositoryGroomer.Modern
         private readonly IAmConfigurationProvider _configurationProvider;
         private readonly IAmProjectFileFinder _projectFileFinder;
         private int _totalNumberOfProjectsWithInvalidReferences;
+        private string _projectXmlContain;
+        private ProjectFileInfo _selectedProject;
+        private readonly IAmFileReader _fileReader;
 
         public ICollectionView Projects { get; set; }
 
@@ -79,10 +83,11 @@ namespace RepositoryGroomer.Modern
             }
         }
 
-        public MainWindowViewModel(IAmConfigurationProvider configurationProvider, IAmProjectFileFinder projectFileFinder)
+        public MainWindowViewModel(IAmConfigurationProvider configurationProvider, IAmProjectFileFinder projectFileFinder, IAmFileReader fileReader)
         {
             _configurationProvider = configurationProvider;
             _projectFileFinder = projectFileFinder;
+            _fileReader = fileReader;
 
             SearchPath = _configurationProvider.SearchPath;
             ReloadProjects();
@@ -97,6 +102,7 @@ namespace RepositoryGroomer.Modern
             TotalNumberOfProjectsWithInvalidReferences = projects.Count(proj => proj.ProjectFileContainsInvalidReferences);
 
             Projects = CollectionViewSource.GetDefaultView(projects);
+            SelectedProject = projects.First();
         }
 
         [CaliburnMicroActionTarget]
@@ -130,5 +136,31 @@ namespace RepositoryGroomer.Modern
                 DontFilterProjects();
         }
 
+        public ProjectFileInfo SelectedProject
+        {
+            get { return _selectedProject; }
+            set
+            {
+                if (value == _selectedProject)
+                    return;
+
+                _selectedProject = value;
+                NotifyOfPropertyChange(()=>SelectedProject);
+                ProjectXmlContain = _fileReader.ReadFromFile(_selectedProject.ProjectFilePath);
+            }
+        }
+
+        public string ProjectXmlContain
+        {
+            get { return _projectXmlContain; }
+            set
+            {
+                if (value == _projectXmlContain)
+                    return;
+
+                _projectXmlContain = value;
+                NotifyOfPropertyChange(() => ProjectXmlContain);
+            }
+        }
     }
 }

@@ -106,7 +106,18 @@ namespace RepositoryGroomer.Core
             var embedInteropTypes = element.Element($"{{{CSPROJ_NAMESPACE}}}EmbedInteropTypes").ToNullableBool();
             var specificVersion = element.Element($"{{{CSPROJ_NAMESPACE}}}SpecificVersion").ToNullableBool();
             var @private = element.Element($"{{{CSPROJ_NAMESPACE}}}Private").ToNullableBool();
-            return new Reference(include, hintPath, unwrappedHintPath, embedInteropTypes, specificVersion, @private);
+            var referenceEntryValid = CheckTarget(include, hintPath, unwrappedHintPath);
+            return new Reference(referenceEntryValid, include, hintPath, unwrappedHintPath, embedInteropTypes, specificVersion, @private);
+        }
+
+        private static bool CheckTarget(string include, string hintPath, string unwrappedHintPath)
+        {
+            var includeValid = !string.IsNullOrWhiteSpace(include);
+
+            if (string.IsNullOrWhiteSpace(hintPath))
+                return includeValid;
+
+            return includeValid && File.Exists(unwrappedHintPath);
         }
 
         private static LinkedFileInfo CreateLinkedFileInfo(XElement element, string containingDirectoryPath)

@@ -8,7 +8,7 @@
         xmlns:modern="clr-namespace:RepositoryGroomer.Modern"
         mc:Ignorable="d"
         Title="MainWindowView"
-        WindowState="Normal" ResizeMode="CanResize"
+        WindowState="Maximized" ResizeMode="CanResize"
         Height="550" Width="1025">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
@@ -36,13 +36,17 @@
                         <RowDefinition/>
                         <RowDefinition/>
                         <RowDefinition/>
+                        <RowDefinition/>
                     </Grid.RowDefinitions>
                     <TextBlock Grid.Column="0" Grid.Row="0" Text="Name: " Margin="2" />
                     <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding ProjectName}" Margin="2" />
                     <TextBlock Grid.Column="0" Grid.Row="1" Text="Directory path: " Margin="2" />
                     <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding ContainingDirectoryPath}" Margin="2" />
                     <TextBlock Grid.Column="0" Grid.Row="2" Text="Links: " Margin="2" Visibility="{Binding IsProjectFileWithLinks, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                    <ListView Grid.Column="1" Grid.Row="2" ItemsSource="{Binding Links}" Visibility="{Binding IsProjectFileWithLinks, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <ListView Grid.Column="1" Grid.Row="2" Margin="2"
+                              ItemsSource="{Binding Links}" 
+                              Visibility="{Binding IsProjectFileWithLinks, Converter={StaticResource BooleanToVisibilityConverter}}"
+                              HorizontalContentAlignment="Stretch">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
@@ -53,7 +57,10 @@
                         </ListView.ItemTemplate>
                     </ListView>
                     <TextBlock Grid.Column="0" Grid.Row="3" Text="Invalid References: " Margin="2" Visibility="{Binding ProjectFileContainsInvalidReferences, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                    <ListView Grid.Column="1" Grid.Row="3" ItemsSource="{Binding References}" Visibility="{Binding ProjectFileContainsInvalidReferences, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <ListView Grid.Column="1" Grid.Row="3" Margin="2"
+                              ItemsSource="{Binding References}" 
+                              Visibility="{Binding ProjectFileContainsInvalidReferences, Converter={StaticResource BooleanToVisibilityConverter}}"
+                              HorizontalContentAlignment="Stretch">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal" Visibility="{Binding ReferenceEntryValid, Converter={StaticResource BooleanToVisibilityConverter}}">
@@ -72,6 +79,8 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
@@ -85,14 +94,15 @@
             <Button Grid.Column="2" Content="..." Width="30" Margin="5" 
                     cal:Message.Attach="[Event Click] = [Action SearchPathChanged]"/>
         </Grid>
-
+        
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="600"/>
             </Grid.RowDefinitions>
 
-            <StackPanel Grid.Row="0">
+            <StackPanel Grid.Row="0"
+                        Name="HeaderControls">
                 <TextBlock>Total number of projects: <TextBlock Text="{Binding TotalNumberOfProjects}" /></TextBlock>
                 <TextBlock>Number of projects with links: <TextBlock Text="{Binding TotalNumberOfProjectsWithLinkedFiles}" /></TextBlock>
                 <TextBlock>Number of projects with invalid references: <TextBlock Text="{Binding TotalNumberOfProjectsWithInvalidReferences}" /></TextBlock>
@@ -102,15 +112,16 @@
                           Content=":Show only linked projects" />
             </StackPanel>
 
-            <ListView Grid.Row="1" ItemsSource="{Binding Projects}"
-                                  ItemTemplate="{StaticResource ProjectInfoTemplate}"
-                                  VerticalAlignment="Stretch"
-                                  HorizontalContentAlignment="Stretch"
-                                  ScrollViewer.CanContentScroll="True"
-                                  ScrollViewer.VerticalScrollBarVisibility="Visible"
-                                  Height="{Binding RelativeSource={RelativeSource FindAncestor,
-                                             AncestorType={x:Type Grid}},
-                                             Path=RowDefinitions[1].ActualHeight}">
+            <ListView Grid.Row="1"
+                      Name="ProjectsList"
+                      ItemsSource="{Binding Projects}"
+                      ItemTemplate="{StaticResource ProjectInfoTemplate}"
+                      VerticalAlignment="Stretch"
+                      HorizontalContentAlignment="Stretch"
+                      ScrollViewer.CanContentScroll="True"
+                      ScrollViewer.VerticalScrollBarVisibility="Visible"
+                      SelectedItem="{Binding SelectedProject}"
+                      Height="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}, Path=RowDefinitions[1].ActualHeight}">
                 <ListView.Template>
                     <ControlTemplate>
                         <ScrollViewer>
@@ -119,6 +130,16 @@
                     </ControlTemplate>
                 </ListView.Template>
             </ListView>
+        </Grid>
+
+        <GridSplitter Grid.Row="2" 
+                      Name="Separator"
+                      Height="5" 
+                      HorizontalAlignment="Stretch"/>
+
+        <Grid Grid.Row="3" 
+              Name="BottomGrid">
+            <RichTextBox modern:RichTextBoxHelper.DocumentXaml="{Binding ProjectXmlContain}"/>
         </Grid>
     </Grid>
 </Window>

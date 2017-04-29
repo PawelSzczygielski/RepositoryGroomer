@@ -23,6 +23,7 @@ namespace RepositoryGroomer.Modern
             _container.Singleton<IEventAggregator, EventAggregator>();
             _container.Singleton<IAmConfigurationProvider, ConfigurationProvider>();
             _container.Singleton<IAmProjectFileFinder, ProjectFileFinder>();
+            _container.Singleton<IAmFileReader, FileReader>();
             _container.Singleton<MainWindowViewModel>();
         }
 

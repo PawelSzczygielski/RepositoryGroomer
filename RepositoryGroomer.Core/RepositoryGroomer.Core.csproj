@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExtensionMethods.cs" />
+    <Compile Include="FileReader.cs" />
     <Compile Include="LinkedFileInfo.cs" />
     <Compile Include="LinkTagTypes.cs" />
     <Compile Include="ProjectFileFinder.cs" />
