@@ -6,6 +6,9 @@ using System.Windows.Documents;
 
 namespace RepositoryGroomer.Modern
 {
+    /// <summary>
+    /// The class has been copied from StackOverflow. 
+    /// </summary>
     public class RichTextBoxHelper : DependencyObject
     {
         public static string GetDocumentXaml(DependencyObject obj)

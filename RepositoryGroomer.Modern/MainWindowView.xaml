@@ -42,10 +42,10 @@
                     <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding ProjectName}" Margin="2" />
                     <TextBlock Grid.Column="0" Grid.Row="1" Text="Directory path: " Margin="2" />
                     <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding ContainingDirectoryPath}" Margin="2" />
-                    <TextBlock Grid.Column="0" Grid.Row="2" Text="Links: " Margin="2" Visibility="{Binding IsProjectFileWithLinks, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    <TextBlock Grid.Column="0" Grid.Row="2" Text="Links: " Margin="2" Visibility="{Binding ProjectFileContainsLinksToFiles, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                     <ListView Grid.Column="1" Grid.Row="2" Margin="2"
                               ItemsSource="{Binding Links}" 
-                              Visibility="{Binding IsProjectFileWithLinks, Converter={StaticResource BooleanToVisibilityConverter}}"
+                              Visibility="{Binding ProjectFileContainsLinksToFiles, Converter={StaticResource BooleanToVisibilityConverter}}"
                               HorizontalContentAlignment="Stretch">
                         <ListView.ItemTemplate>
                             <DataTemplate>
@@ -106,10 +106,16 @@
                 <TextBlock>Total number of projects: <TextBlock Text="{Binding TotalNumberOfProjects}" /></TextBlock>
                 <TextBlock>Number of projects with links: <TextBlock Text="{Binding TotalNumberOfProjectsWithLinkedFiles}" /></TextBlock>
                 <TextBlock>Number of projects with invalid references: <TextBlock Text="{Binding TotalNumberOfProjectsWithInvalidReferences}" /></TextBlock>
-                <CheckBox HorizontalAlignment="Left"
+                <StackPanel Orientation="Horizontal">
+                    <CheckBox HorizontalAlignment="Left"
                           Style="{StaticResource CheckboxWithLabel}"
                           IsChecked="{Binding ShowOnlyLinkedProjects}"
-                          Content=":Show only linked projects" />
+                          Content=":Show projects with links only:" />
+                    <CheckBox HorizontalAlignment="Left"
+                          Style="{StaticResource CheckboxWithLabel}"
+                          IsChecked="{Binding ShowOnlyInvalidlyReferencedProjects}"
+                          Content=":Show projects with broken references only:" />
+                </StackPanel>
             </StackPanel>
 
             <ListView Grid.Row="1"

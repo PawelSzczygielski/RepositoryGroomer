@@ -36,7 +36,7 @@ namespace RepositoryGroomer.Core.Tests
             Assert.That(projectFileInfo.ContainingDirectoryPath, Is.EqualTo(containingDirectoryPath));
             Assert.That(projectFileInfo.ProjectName, Is.EqualTo(projectName));
             Assert.That(projectFileInfo.Links, Is.Empty);
-            Assert.That(projectFileInfo.IsProjectFileWithLinks, Is.False);
+            Assert.That(projectFileInfo.ProjectFileContainsLinksToFiles, Is.False);
             Assert.That(projectFileInfo.IsProjectFileXmlCorrect, Is.False);
         }
 
@@ -54,7 +54,7 @@ namespace RepositoryGroomer.Core.Tests
             Assert.That(projectFileInfo.ContainingDirectoryPath, Is.EqualTo(containingDirectoryPath));
             Assert.That(projectFileInfo.ProjectName, Is.EqualTo(projectName));
             Assert.That(projectFileInfo.Links, Is.Empty);
-            Assert.That(projectFileInfo.IsProjectFileWithLinks, Is.False);
+            Assert.That(projectFileInfo.ProjectFileContainsLinksToFiles, Is.False);
             Assert.That(projectFileInfo.IsProjectFileXmlCorrect, Is.False);
         }
 
@@ -66,7 +66,7 @@ namespace RepositoryGroomer.Core.Tests
             var projectFileInfo = ProjectFileInfoBuilder.Build("name1", "name2", "name3", projectFileXmlContain);
 
             Assert.That(projectFileInfo.Links.Count, Is.EqualTo(3));
-            Assert.That(projectFileInfo.IsProjectFileWithLinks, Is.True);
+            Assert.That(projectFileInfo.ProjectFileContainsLinksToFiles, Is.True);
             Assert.That(projectFileInfo.IsProjectFileXmlCorrect, Is.True);
         }
 

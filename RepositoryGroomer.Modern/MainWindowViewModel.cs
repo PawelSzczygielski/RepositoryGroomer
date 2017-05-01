@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
 using RepositoryGroomer.Core;
@@ -7,7 +6,7 @@ using Caliburn.Micro;
 
 namespace RepositoryGroomer.Modern
 {
-   
+
     public class MainWindowViewModel : PropertyChangedBase
     {
         private string _searchPath;
@@ -20,6 +19,7 @@ namespace RepositoryGroomer.Modern
         private string _projectXmlContain;
         private ProjectFileInfo _selectedProject;
         private readonly IAmFileReader _fileReader;
+        private bool _showOnlyInvalidlyReferencedProjects;
 
         public ICollectionView Projects { get; set; }
 
@@ -44,6 +44,20 @@ namespace RepositoryGroomer.Modern
 
                 _showOnlyLinkedProjects = value;
                 NotifyOfPropertyChange(() => ShowOnlyLinkedProjects);
+                ChangeProjectFilter();
+            }
+        }
+
+        public bool ShowOnlyInvalidlyReferencedProjects
+        {
+            get { return _showOnlyInvalidlyReferencedProjects; }
+            set
+            {
+                if (value == _showOnlyInvalidlyReferencedProjects)
+                    return;
+
+                _showOnlyInvalidlyReferencedProjects = value;
+                NotifyOfPropertyChange(() => ShowOnlyInvalidlyReferencedProjects);
                 ChangeProjectFilter();
             }
         }
@@ -90,18 +104,20 @@ namespace RepositoryGroomer.Modern
             _fileReader = fileReader;
 
             SearchPath = _configurationProvider.SearchPath;
-            ReloadProjects();
             ShowOnlyLinkedProjects = true;
+            ShowOnlyInvalidlyReferencedProjects = true;
+            ReloadProjects();
         }
 
         private void ReloadProjects()
         {
             var projects = _projectFileFinder.GetAllProjects(SearchPath);
             TotalNumberOfProjects = projects.Count;
-            TotalNumberOfProjectsWithLinkedFiles = projects.Count(proj => proj.IsProjectFileWithLinks);
+            TotalNumberOfProjectsWithLinkedFiles = projects.Count(proj => proj.ProjectFileContainsLinksToFiles);
             TotalNumberOfProjectsWithInvalidReferences = projects.Count(proj => proj.ProjectFileContainsInvalidReferences);
 
             Projects = CollectionViewSource.GetDefaultView(projects);
+            ChangeProjectFilter();
             SelectedProject = projects.First();
         }
 
@@ -111,29 +127,25 @@ namespace RepositoryGroomer.Modern
             ReloadProjects();
         }
 
-        private void FilterProjectsByLinks()
-        {
-            var predicate = new Predicate<object>(bj =>
-            {
-                var projFileInfo = bj as ProjectFileInfo;
-                if (projFileInfo == null)
-                    return false;
-                return projFileInfo.IsProjectFileWithLinks;
-            });
-            Projects.Filter = predicate;
-        }
-
-        private void DontFilterProjects()
-        {
-            Projects.Filter = null;
-        }
-
         private void ChangeProjectFilter()
         {
+            if (Projects == null)
+                return;
+
+            var filterGroup = new ProjectFileFilterGroup();
+
             if (ShowOnlyLinkedProjects)
-                FilterProjectsByLinks();
+                filterGroup.AddLinkFilter();
             else
-                DontFilterProjects();
+                filterGroup.RemoveLinkFilter();
+
+            if (ShowOnlyInvalidlyReferencedProjects)
+                filterGroup.AddReferenceFilter();
+            else
+                filterGroup.RemoveReferenceFilter();
+
+            Projects.Filter = filterGroup.Filter;
+            Projects.Refresh();
         }
 
         public ProjectFileInfo SelectedProject
@@ -145,7 +157,7 @@ namespace RepositoryGroomer.Modern
                     return;
 
                 _selectedProject = value;
-                NotifyOfPropertyChange(()=>SelectedProject);
+                NotifyOfPropertyChange(() => SelectedProject);
                 ProjectXmlContain = _fileReader.ReadFromFile(_selectedProject.ProjectFilePath);
             }
         }

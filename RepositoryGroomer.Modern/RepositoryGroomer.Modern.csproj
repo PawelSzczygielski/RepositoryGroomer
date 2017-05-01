@@ -71,6 +71,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ProjectFileFilterGroup.cs" />
     <Compile Include="RichTextBoxHelper.cs" />
     <Page Include="MainWindowView.xaml">
       <Generator>MSBuild:Compile</Generator>
