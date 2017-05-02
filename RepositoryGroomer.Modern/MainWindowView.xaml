@@ -78,9 +78,9 @@
     <Grid ShowGridLines="True">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
@@ -94,11 +94,11 @@
             <Button Grid.Column="2" Content="..." Width="30" Margin="5" 
                     cal:Message.Attach="[Event Click] = [Action SearchPathChanged]"/>
         </Grid>
-        
+
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="600"/>
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
             <StackPanel Grid.Row="0"
@@ -126,15 +126,7 @@
                       HorizontalContentAlignment="Stretch"
                       ScrollViewer.CanContentScroll="True"
                       ScrollViewer.VerticalScrollBarVisibility="Visible"
-                      SelectedItem="{Binding SelectedProject}"
-                      Height="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}, Path=RowDefinitions[1].ActualHeight}">
-                <ListView.Template>
-                    <ControlTemplate>
-                        <ScrollViewer>
-                            <ItemsPresenter></ItemsPresenter>
-                        </ScrollViewer>
-                    </ControlTemplate>
-                </ListView.Template>
+                      SelectedItem="{Binding SelectedProject}">
             </ListView>
         </Grid>
 
@@ -145,7 +137,7 @@
 
         <Grid Grid.Row="3" 
               Name="BottomGrid">
-            <RichTextBox modern:RichTextBoxHelper.DocumentXaml="{Binding ProjectXmlContain}"/>
+            <RichTextBox modern:RichTextBoxHelper.DocumentXaml="{Binding ProjectXmlContain}" Grid.ColumnSpan="2"/>
         </Grid>
     </Grid>
 </Window>
