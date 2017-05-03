@@ -6,6 +6,8 @@
         xmlns:core="clr-namespace:RepositoryGroomer.Core;assembly=RepositoryGroomer.Core"
         xmlns:cal="http://www.caliburnproject.org"
         xmlns:modern="clr-namespace:RepositoryGroomer.Modern"
+        xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         mc:Ignorable="d"
         Title="MainWindowView"
         WindowState="Maximized" ResizeMode="CanResize"
@@ -137,7 +139,17 @@
 
         <Grid Grid.Row="3" 
               Name="BottomGrid">
-            <RichTextBox modern:RichTextBoxHelper.DocumentXaml="{Binding ProjectXmlContain}" Grid.ColumnSpan="2"/>
+            <avalonedit:TextEditor
+                        WordWrap="True"
+                        ShowLineNumbers="True"
+                        LineNumbersForeground="Magenta"
+                        FontFamily="Consolas"
+                        SyntaxHighlighting="XML"
+                        FontSize="10pt">
+                <i:Interaction.Behaviors>
+                    <modern:AvalonEditBehaviour GiveMeTheText="{Binding ProjectXmlContain, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                </i:Interaction.Behaviors>
+            </avalonedit:TextEditor>
         </Grid>
     </Grid>
 </Window>
