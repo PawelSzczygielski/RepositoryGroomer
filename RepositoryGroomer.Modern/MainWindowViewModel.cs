@@ -118,7 +118,7 @@ namespace RepositoryGroomer.Modern
 
             Projects = CollectionViewSource.GetDefaultView(projects);
             ChangeProjectFilter();
-            SelectedProject = projects.First();
+            SelectedProject = projects.FirstOrDefault();
         }
 
         [CaliburnMicroActionTarget]
@@ -153,7 +153,7 @@ namespace RepositoryGroomer.Modern
             get { return _selectedProject; }
             set
             {
-                if (value == _selectedProject)
+                if (value == _selectedProject || value == null)
                     return;
 
                 _selectedProject = value;
