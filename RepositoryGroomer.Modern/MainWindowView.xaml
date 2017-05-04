@@ -63,9 +63,18 @@
                               ItemsSource="{Binding References}" 
                               Visibility="{Binding ProjectFileContainsInvalidReferences, Converter={StaticResource BooleanToVisibilityConverter}}"
                               HorizontalContentAlignment="Stretch">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ReferenceEntryValid}" Value="True">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListView.ItemContainerStyle>
                         <ListView.ItemTemplate>
                             <DataTemplate>
-                                <StackPanel Orientation="Horizontal" Visibility="{Binding ReferenceEntryValid, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                <StackPanel Orientation="Horizontal" Visibility="{Binding ReferenceEntryValid, Converter={StaticResource InvertedBooleanToVisibilityConverter}}">
                                     <Image Source="Resources/broken-link-16.png" />
                                     <TextBlock Text="{Binding UnwrappedHintPath}" />
                                 </StackPanel>
