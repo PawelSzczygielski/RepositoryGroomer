@@ -48,7 +48,16 @@
                     <ListView Grid.Column="1" Grid.Row="2" Margin="2"
                               ItemsSource="{Binding Links}" 
                               Visibility="{Binding ProjectFileContainsLinksToFiles, Converter={StaticResource BooleanToVisibilityConverter}}"
-                              HorizontalContentAlignment="Stretch">
+                              HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+                        <ListView.Resources>
+                            <Style TargetType="ListViewItem">
+                                <Style.Triggers>
+                                    <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                                        <Setter Property="IsSelected" Value="True" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListView.Resources>
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
@@ -62,9 +71,20 @@
                     <ListView Grid.Column="1" Grid.Row="3" Margin="2"
                               ItemsSource="{Binding References}" 
                               Visibility="{Binding ProjectFileContainsInvalidReferences, Converter={StaticResource BooleanToVisibilityConverter}}"
-                              HorizontalContentAlignment="Stretch">
+                              >
+                        
+                        <!--<ListView.Resources>
+                            <Style TargetType="ListViewItem">
+                                <Style.Triggers>
+                                    <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                                        <Setter Property="IsSelected" Value="True" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListView.Resources>-->
                         <ListView.ItemContainerStyle>
                             <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding ReferenceEntryValid}" Value="True">
                                         <Setter Property="Visibility" Value="Collapsed" />
@@ -74,7 +94,9 @@
                         </ListView.ItemContainerStyle>
                         <ListView.ItemTemplate>
                             <DataTemplate>
-                                <StackPanel Orientation="Horizontal" Visibility="{Binding ReferenceEntryValid, Converter={StaticResource InvertedBooleanToVisibilityConverter}}">
+                                <StackPanel Orientation="Horizontal" 
+                                            Visibility="{Binding ReferenceEntryValid, Converter={StaticResource InvertedBooleanToVisibilityConverter}}"
+                                            cal:Message.Attach="[Event PreviewMouseDown] = [Action SelectedReferenceChanged($dataContext)]">
                                     <Image Source="Resources/broken-link-16.png" />
                                     <TextBlock Text="{Binding UnwrappedHintPath}" />
                                 </StackPanel>

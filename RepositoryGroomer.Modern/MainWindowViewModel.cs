@@ -174,5 +174,10 @@ namespace RepositoryGroomer.Modern
                 NotifyOfPropertyChange(() => ProjectXmlContain);
             }
         }
+
+        public void SelectedReferenceChanged(Reference selectedReference)
+        {
+            //Search in xml, highlight it.
+        }
     }
 }
