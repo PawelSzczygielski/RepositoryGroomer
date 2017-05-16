@@ -73,7 +73,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="AvalonTextEditorHelper.cs" />
+    <Compile Include="AvalonEditBehaviour.cs" />
     <Compile Include="ProjectFileFilterGroup.cs" />
     <Page Include="MainWindowView.xaml">
       <Generator>MSBuild:Compile</Generator>

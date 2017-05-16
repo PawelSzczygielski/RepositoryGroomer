@@ -176,7 +176,8 @@
                         LineNumbersForeground="Magenta"
                         FontFamily="Consolas"
                         SyntaxHighlighting="XML"
-                        FontSize="10pt">
+                        FontSize="10pt"
+                        IsReadOnly="True" >
                 <i:Interaction.Behaviors>
                     <modern:AvalonEditBehaviour GiveMeTheText="{Binding ProjectXmlContain, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 </i:Interaction.Behaviors>
