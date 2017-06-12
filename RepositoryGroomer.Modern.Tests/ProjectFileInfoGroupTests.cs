@@ -88,10 +88,10 @@ namespace RepositoryGroomer.Modern.Tests
             var projectsInternal = new List<ProjectFileInfo>
             {
                 new ProjectFileInfo("ProjectWithBrokenReference", "DirPath1", "ProjectName1", new List<LinkedFileInfo>(),
-                    new List<Reference> {new Reference(false, "Include", "HintPath", "UnwrappedHintPath")},
+                    new List<Reference> {new Reference(string.Empty, false, "Include", "HintPath", "UnwrappedHintPath")},
                     true),
                 new ProjectFileInfo("CorrectProject", "DirPath2", "ProjectName2", new List<LinkedFileInfo>(),
-                new List<Reference> {new Reference(true, "Include", "HintPath", string.Empty)}, true),
+                new List<Reference> {new Reference(string.Empty, true, "Include", "HintPath", string.Empty)}, true),
 
             };
 

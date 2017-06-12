@@ -69,7 +69,7 @@ namespace RepositoryGroomer.Modern.Tests
             return new ProjectFileInfo("FP" + suffix, "DP" + suffix, "PN" + suffix, new List<LinkedFileInfo>(),
                 new List<Reference>
                 {
-                    new Reference(false, "Include" + suffix)
+                    new Reference(string.Empty, false, "Include" + suffix)
                 }, true);
         }
     }

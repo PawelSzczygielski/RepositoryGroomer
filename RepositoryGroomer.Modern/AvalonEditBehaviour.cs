@@ -7,19 +7,19 @@ namespace RepositoryGroomer.Modern
 {
     public sealed class AvalonEditBehaviour : Behavior<TextEditor>
     {
-        public static readonly DependencyProperty GiveMeTheTextProperty =
-            DependencyProperty.Register(nameof(GiveMeTheText), typeof(string), typeof(AvalonEditBehaviour),
+        public static readonly DependencyProperty TextContainProperty =
+            DependencyProperty.Register(nameof(TextContain), typeof(string), typeof(AvalonEditBehaviour),
             new FrameworkPropertyMetadata(default(string), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, PropertyChangedCallback));
 
-        public string GiveMeTheText
+        public string TextContain
         {
-            get { return (string)GetValue(GiveMeTheTextProperty); }
-            set { SetValue(GiveMeTheTextProperty, value); }
+            get { return (string)GetValue(TextContainProperty); }
+            set { SetValue(TextContainProperty, value); }
         }
 
         protected override void OnAttached()
         {
-            base.OnAttached();
+            base.OnAttached(); 
             if (AssociatedObject != null)
                 AssociatedObject.TextChanged += AssociatedObjectOnTextChanged;
         }
@@ -35,7 +35,7 @@ namespace RepositoryGroomer.Modern
         {
             var textEditor = sender as TextEditor;
             if (textEditor?.Document != null)
-                GiveMeTheText = textEditor.Document.Text;
+                TextContain = textEditor.Document.Text;
         }
 
         private static void PropertyChangedCallback(
