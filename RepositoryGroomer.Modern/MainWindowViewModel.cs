@@ -175,9 +175,26 @@ namespace RepositoryGroomer.Modern
             }
         }
 
+        private string _referenceXmlContain;
+        public string ReferenceXmlContain
+        {
+            get { return _referenceXmlContain; }
+            set
+            {
+                if (value == _referenceXmlContain)
+                    return;
+
+                _referenceXmlContain = value;
+                NotifyOfPropertyChange(() => ReferenceXmlContain);
+            }
+        }
+
+
+
         public void SelectedReferenceChanged(Reference selectedReference)
         {
-            //Search in xml, highlight it.
+            if(selectedReference != null && !string.IsNullOrEmpty(selectedReference.OriginalXml))
+                ReferenceXmlContain = selectedReference.OriginalXml;
         }
     }
 }

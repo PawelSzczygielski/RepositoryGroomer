@@ -9,7 +9,10 @@ namespace RepositoryGroomer.Modern
     {
         public static readonly DependencyProperty TextContainProperty =
             DependencyProperty.Register(nameof(TextContain), typeof(string), typeof(AvalonEditBehaviour),
-            new FrameworkPropertyMetadata(default(string), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, PropertyChangedCallback));
+            new FrameworkPropertyMetadata(default(string), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, TextContainPropertyChangedCallback));
+
+        public static readonly DependencyProperty ReferenceContainProperty = DependencyProperty.Register(nameof(ReferenceContain), typeof(string), typeof(AvalonEditBehaviour),
+            new FrameworkPropertyMetadata(default(string), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, ReferenceContainPropertyChangedCallback));
 
         public string TextContain
         {
@@ -17,9 +20,15 @@ namespace RepositoryGroomer.Modern
             set { SetValue(TextContainProperty, value); }
         }
 
+        public string ReferenceContain
+        {
+            get { return (string)GetValue(ReferenceContainProperty); }
+            set { SetValue(ReferenceContainProperty, value); }
+        }
+
         protected override void OnAttached()
         {
-            base.OnAttached(); 
+            base.OnAttached();
             if (AssociatedObject != null)
                 AssociatedObject.TextChanged += AssociatedObjectOnTextChanged;
         }
@@ -38,7 +47,7 @@ namespace RepositoryGroomer.Modern
                 TextContain = textEditor.Document.Text;
         }
 
-        private static void PropertyChangedCallback(
+        private static void TextContainPropertyChangedCallback(
             DependencyObject dependencyObject,
             DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
         {
@@ -49,6 +58,21 @@ namespace RepositoryGroomer.Modern
                 var caretOffset = editor.CaretOffset;
                 editor.Document.Text = dependencyPropertyChangedEventArgs.NewValue.ToString();
                 editor.CaretOffset = caretOffset;
+            }
+        }
+
+        private static void ReferenceContainPropertyChangedCallback(
+            DependencyObject dependencyObject,
+            DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
+        {
+            var behavior = dependencyObject as AvalonEditBehaviour;
+            var editor = behavior?.AssociatedObject;
+            if (editor?.Document != null)
+            {
+                var newStringValue = (string)dependencyPropertyChangedEventArgs.NewValue;
+                var indexof = editor.Document.Text.IndexOf(newStringValue);
+                if (indexof != -1)
+                    editor.Select(indexof, newStringValue.Length);
             }
         }
     }

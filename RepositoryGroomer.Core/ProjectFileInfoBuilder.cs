@@ -107,7 +107,7 @@ namespace RepositoryGroomer.Core
             var specificVersion = element.Element($"{{{CSPROJ_NAMESPACE}}}SpecificVersion").ToNullableBool();
             var @private = element.Element($"{{{CSPROJ_NAMESPACE}}}Private").ToNullableBool();
             var referenceEntryValid = CheckTarget(include, hintPath, unwrappedHintPath);
-            return new Reference(element.ToString(), referenceEntryValid, include, hintPath, unwrappedHintPath, embedInteropTypes, specificVersion, @private);
+            return new Reference(element.StripNamespaces().ToString(), referenceEntryValid, include, hintPath, unwrappedHintPath, embedInteropTypes, specificVersion, @private);
         }
 
         private static bool CheckTarget(string include, string hintPath, string unwrappedHintPath)
