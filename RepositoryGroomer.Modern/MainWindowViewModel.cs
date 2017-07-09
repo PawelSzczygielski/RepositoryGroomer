@@ -20,6 +20,7 @@ namespace RepositoryGroomer.Modern
         private ProjectFileInfo _selectedProject;
         private readonly IAmFileReader _fileReader;
         private bool _showOnlyInvalidlyReferencedProjects;
+        private Reference _selectedReference;
 
         public ICollectionView Projects { get; set; }
 
@@ -175,26 +176,23 @@ namespace RepositoryGroomer.Modern
             }
         }
 
-        private string _referenceXmlContain;
-        public string ReferenceXmlContain
+        public Reference SelectedReference
         {
-            get { return _referenceXmlContain; }
+            get { return _selectedReference; }
             set
             {
-                if (value == _referenceXmlContain)
+                if (value == _selectedReference)
                     return;
 
-                _referenceXmlContain = value;
-                NotifyOfPropertyChange(() => ReferenceXmlContain);
+                _selectedReference = value;
+                NotifyOfPropertyChange(()=>SelectedReference);
             }
         }
 
 
-
         public void SelectedReferenceChanged(Reference selectedReference)
         {
-            if(selectedReference != null && !string.IsNullOrEmpty(selectedReference.OriginalXml))
-                ReferenceXmlContain = selectedReference.OriginalXml;
+            SelectedReference = selectedReference;
         }
     }
 }

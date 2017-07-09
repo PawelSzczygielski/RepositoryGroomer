@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Interactivity;
 using ICSharpCode.AvalonEdit;
+using RepositoryGroomer.Core;
 
 namespace RepositoryGroomer.Modern
 {
@@ -11,7 +12,7 @@ namespace RepositoryGroomer.Modern
             DependencyProperty.Register(nameof(TextContain), typeof(string), typeof(AvalonEditBehaviour),
             new FrameworkPropertyMetadata(default(string), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, TextContainPropertyChangedCallback));
 
-        public static readonly DependencyProperty ReferenceContainProperty = DependencyProperty.Register(nameof(ReferenceContain), typeof(string), typeof(AvalonEditBehaviour),
+        public static readonly DependencyProperty ReferenceContainProperty = DependencyProperty.Register(nameof(ReferenceContain), typeof(Reference), typeof(AvalonEditBehaviour),
             new FrameworkPropertyMetadata(default(string), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, ReferenceContainPropertyChangedCallback));
 
         public string TextContain
@@ -20,9 +21,9 @@ namespace RepositoryGroomer.Modern
             set { SetValue(TextContainProperty, value); }
         }
 
-        public string ReferenceContain
+        public Reference ReferenceContain
         {
-            get { return (string)GetValue(ReferenceContainProperty); }
+            get { return (Reference)GetValue(ReferenceContainProperty); }
             set { SetValue(ReferenceContainProperty, value); }
         }
 
@@ -69,10 +70,14 @@ namespace RepositoryGroomer.Modern
             var editor = behavior?.AssociatedObject;
             if (editor?.Document != null)
             {
-                var newStringValue = (string)dependencyPropertyChangedEventArgs.NewValue;
-                var indexof = editor.Document.Text.IndexOf(newStringValue);
-                if (indexof != -1)
-                    editor.Select(indexof, newStringValue.Length);
+                var reference = (Reference)dependencyPropertyChangedEventArgs.NewValue;
+                var indexof = editor.Document.Text.IndexOf(reference.Include) - 20;
+                if (indexof > -1)
+                    editor.Select(indexof, reference.OriginalXml.Length + 16);
+                
+                editor.ScrollToLine(editor.TextArea.TextView.HighlightedLine);
+
+                //jeszcze trzeba przejechac do selekcji, a do tego najpierw zmieniamy xml przy zaznaczaniu referencji.
             }
         }
     }

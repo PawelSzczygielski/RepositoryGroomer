@@ -70,18 +70,7 @@
                     <TextBlock Grid.Column="0" Grid.Row="3" Text="Invalid References: " Margin="2" Visibility="{Binding ProjectFileContainsInvalidReferences, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                     <ListView Grid.Column="1" Grid.Row="3" Margin="2"
                               ItemsSource="{Binding References}" 
-                              Visibility="{Binding ProjectFileContainsInvalidReferences, Converter={StaticResource BooleanToVisibilityConverter}}"
-                              >
-                        
-                        <!--<ListView.Resources>
-                            <Style TargetType="ListViewItem">
-                                <Style.Triggers>
-                                    <Trigger Property="IsKeyboardFocusWithin" Value="True">
-                                        <Setter Property="IsSelected" Value="True" />
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </ListView.Resources>-->
+                              Visibility="{Binding ProjectFileContainsInvalidReferences, Converter={StaticResource BooleanToVisibilityConverter}}">
                         <ListView.ItemContainerStyle>
                             <Style TargetType="ListViewItem">
                                 <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -180,7 +169,7 @@
                         IsReadOnly="True" >
                 <i:Interaction.Behaviors>
                     <modern:AvalonEditBehaviour TextContain="{Binding ProjectXmlContain, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                ReferenceContain="{Binding ReferenceXmlContain, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                ReferenceContain="{Binding SelectedReference, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 </i:Interaction.Behaviors>
             </avalonedit:TextEditor>
         </Grid>
