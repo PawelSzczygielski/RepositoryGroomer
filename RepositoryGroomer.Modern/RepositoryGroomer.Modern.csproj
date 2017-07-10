@@ -74,6 +74,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AvalonEditBehaviour.cs" />
+    <Compile Include="IgnoreMouseWheelBehavior.cs" />
     <Compile Include="ProjectFileFilterGroup.cs" />
     <Page Include="MainWindowView.xaml">
       <Generator>MSBuild:Compile</Generator>

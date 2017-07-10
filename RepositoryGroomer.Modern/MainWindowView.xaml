@@ -13,7 +13,7 @@
         WindowState="Maximized" ResizeMode="CanResize"
         Height="550" Width="1025">
     <Window.Resources>
-        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <modern:InvertedBooleanToVisibilityConverter x:Key="InvertedBooleanToVisibilityConverter" />
         <Style x:Key="CheckboxWithLabel" TargetType="CheckBox">
             <Style.Resources>
@@ -30,25 +30,29 @@
             <Border BorderBrush="#FF66B6A0" BorderThickness="1">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition />
                     </Grid.RowDefinitions>
                     <TextBlock Grid.Column="0" Grid.Row="0" Text="Name: " Margin="2" />
                     <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding ProjectName}" Margin="2" />
                     <TextBlock Grid.Column="0" Grid.Row="1" Text="Directory path: " Margin="2" />
                     <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding ContainingDirectoryPath}" Margin="2" />
-                    <TextBlock Grid.Column="0" Grid.Row="2" Text="Links: " Margin="2" Visibility="{Binding ProjectFileContainsLinksToFiles, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    <TextBlock Grid.Column="0" Grid.Row="2" Text="Links: " Margin="2"
+                               Visibility="{Binding ProjectFileContainsLinksToFiles, Converter={StaticResource BooleanToVisibilityConverter}}" />
                     <ListView Grid.Column="1" Grid.Row="2" Margin="2"
-                              ItemsSource="{Binding Links}" 
+                              ItemsSource="{Binding Links}"
                               Visibility="{Binding ProjectFileContainsLinksToFiles, Converter={StaticResource BooleanToVisibilityConverter}}"
                               HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+                        <i:Interaction.Behaviors>
+                            <modern:IgnoreMouseWheelBehavior />
+                        </i:Interaction.Behaviors>
                         <ListView.Resources>
                             <Style TargetType="ListViewItem">
                                 <Style.Triggers>
@@ -61,16 +65,22 @@
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
-                                    <Image Source="Resources/broken-link-16.png" Visibility="{Binding TargetLinkedFileExists, Converter={StaticResource InvertedBooleanToVisibilityConverter}}"/>
+
+                                    <Image Source="Resources/broken-link-16.png"
+                                           Visibility="{Binding TargetLinkedFileExists, Converter={StaticResource InvertedBooleanToVisibilityConverter}}" />
                                     <TextBlock Text="{Binding LinkedFileUnwrappedPath}" />
                                 </StackPanel>
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
-                    <TextBlock Grid.Column="0" Grid.Row="3" Text="Invalid References: " Margin="2" Visibility="{Binding ProjectFileContainsInvalidReferences, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    <TextBlock Grid.Column="0" Grid.Row="3" Text="Invalid References: " Margin="2"
+                               Visibility="{Binding ProjectFileContainsInvalidReferences, Converter={StaticResource BooleanToVisibilityConverter}}" />
                     <ListView Grid.Column="1" Grid.Row="3" Margin="2"
-                              ItemsSource="{Binding References}" 
+                              ItemsSource="{Binding References}"
                               Visibility="{Binding ProjectFileContainsInvalidReferences, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <i:Interaction.Behaviors>
+                            <modern:IgnoreMouseWheelBehavior />
+                        </i:Interaction.Behaviors>
                         <ListView.ItemContainerStyle>
                             <Style TargetType="ListViewItem">
                                 <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -83,9 +93,10 @@
                         </ListView.ItemContainerStyle>
                         <ListView.ItemTemplate>
                             <DataTemplate>
-                                <StackPanel Orientation="Horizontal" 
+                                <StackPanel Orientation="Horizontal"
                                             Visibility="{Binding ReferenceEntryValid, Converter={StaticResource InvertedBooleanToVisibilityConverter}}"
                                             cal:Message.Attach="[Event PreviewMouseDown] = [Action SelectedReferenceChanged($dataContext)]">
+
                                     <Image Source="Resources/broken-link-16.png" />
                                     <TextBlock Text="{Binding UnwrappedHintPath}" />
                                 </StackPanel>
@@ -99,22 +110,22 @@
 
     <Grid ShowGridLines="True">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Column="0" Margin="5">Code repository location:</TextBlock>
-            <TextBox Grid.Column="1" Margin="5" Text="{Binding SearchPath}"/>
-            <Button Grid.Column="2" Content="..." Width="30" Margin="5" 
-                    cal:Message.Attach="[Event Click] = [Action SearchPathChanged]"/>
+            <TextBox Grid.Column="1" Margin="5" Text="{Binding SearchPath}" />
+            <Button Grid.Column="2" Content="..." Width="30" Margin="5"
+                    cal:Message.Attach="[Event Click] = [Action SearchPathChanged]" />
         </Grid>
 
         <Grid Grid.Row="1">
@@ -126,17 +137,23 @@
             <StackPanel Grid.Row="0"
                         Name="HeaderControls">
                 <TextBlock>Total number of projects: <TextBlock Text="{Binding TotalNumberOfProjects}" /></TextBlock>
-                <TextBlock>Number of projects with links: <TextBlock Text="{Binding TotalNumberOfProjectsWithLinkedFiles}" /></TextBlock>
-                <TextBlock>Number of projects with invalid references: <TextBlock Text="{Binding TotalNumberOfProjectsWithInvalidReferences}" /></TextBlock>
+                <TextBlock>
+                    Number of projects with links:
+                    <TextBlock Text="{Binding TotalNumberOfProjectsWithLinkedFiles}" />
+                </TextBlock>
+                <TextBlock>
+                    Number of projects with invalid references:
+                    <TextBlock Text="{Binding TotalNumberOfProjectsWithInvalidReferences}" />
+                </TextBlock>
                 <StackPanel Orientation="Horizontal">
                     <CheckBox HorizontalAlignment="Left"
-                          Style="{StaticResource CheckboxWithLabel}"
-                          IsChecked="{Binding ShowOnlyLinkedProjects}"
-                          Content=":Show projects with links only:" />
+                              Style="{StaticResource CheckboxWithLabel}"
+                              IsChecked="{Binding ShowOnlyLinkedProjects}"
+                              Content=":Show projects with links only:" />
                     <CheckBox HorizontalAlignment="Left"
-                          Style="{StaticResource CheckboxWithLabel}"
-                          IsChecked="{Binding ShowOnlyInvalidlyReferencedProjects}"
-                          Content=":Show projects with broken references only:" />
+                              Style="{StaticResource CheckboxWithLabel}"
+                              IsChecked="{Binding ShowOnlyInvalidlyReferencedProjects}"
+                              Content=":Show projects with broken references only:" />
                 </StackPanel>
             </StackPanel>
 
@@ -148,28 +165,28 @@
                       HorizontalContentAlignment="Stretch"
                       ScrollViewer.CanContentScroll="True"
                       ScrollViewer.VerticalScrollBarVisibility="Visible"
-                      SelectedItem="{Binding SelectedProject}">
-            </ListView>
+                      SelectedItem="{Binding SelectedProject}" />
         </Grid>
 
-        <GridSplitter Grid.Row="2" 
+        <GridSplitter Grid.Row="2"
                       Name="Separator"
-                      Height="5" 
-                      HorizontalAlignment="Stretch"/>
+                      Height="5"
+                      HorizontalAlignment="Stretch" />
 
-        <Grid Grid.Row="3" 
+        <Grid Grid.Row="3"
               Name="BottomGrid">
             <avalonedit:TextEditor
-                        WordWrap="True"
-                        ShowLineNumbers="True"
-                        LineNumbersForeground="Magenta"
-                        FontFamily="Consolas"
-                        SyntaxHighlighting="XML"
-                        FontSize="10pt"
-                        IsReadOnly="True" >
+                WordWrap="True"
+                ShowLineNumbers="True"
+                LineNumbersForeground="Magenta"
+                FontFamily="Consolas"
+                SyntaxHighlighting="XML"
+                FontSize="10pt"
+                IsReadOnly="True">
                 <i:Interaction.Behaviors>
-                    <modern:AvalonEditBehaviour TextContain="{Binding ProjectXmlContain, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                ReferenceContain="{Binding SelectedReference, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <modern:AvalonEditBehaviour
+                        TextContain="{Binding ProjectXmlContain, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        ReferenceContain="{Binding SelectedReference, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </i:Interaction.Behaviors>
             </avalonedit:TextEditor>
         </Grid>
