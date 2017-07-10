@@ -28,7 +28,7 @@
         </Style>
         <DataTemplate x:Key="ProjectInfoTemplate" DataType="core:ProjectFileInfo">
             <Border BorderBrush="#FF66B6A0" BorderThickness="1">
-                <Grid>
+                <Grid cal:Message.Attach="[Event PreviewMouseDown] = [Action SelectedProjectChanged($dataContext)]">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="Auto" />
@@ -165,7 +165,7 @@
                       HorizontalContentAlignment="Stretch"
                       ScrollViewer.CanContentScroll="True"
                       ScrollViewer.VerticalScrollBarVisibility="Visible"
-                      SelectedItem="{Binding SelectedProject}" />
+                      SelectedItem="{Binding SelectedProject}"/>
         </Grid>
 
         <GridSplitter Grid.Row="2"
