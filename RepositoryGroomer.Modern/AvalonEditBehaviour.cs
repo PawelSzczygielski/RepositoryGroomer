@@ -56,9 +56,7 @@ namespace RepositoryGroomer.Modern
             var editor = behavior?.AssociatedObject;
             if (editor?.Document != null)
             {
-                var caretOffset = editor.CaretOffset;
                 editor.Document.Text = dependencyPropertyChangedEventArgs.NewValue.ToString();
-                editor.CaretOffset = caretOffset;
             }
         }
 
