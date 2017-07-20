@@ -13,7 +13,7 @@ namespace RepositoryGroomer.Modern
             new FrameworkPropertyMetadata(default(string), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, TextContainPropertyChangedCallback));
 
         public static readonly DependencyProperty ReferenceContainProperty = DependencyProperty.Register(nameof(ReferenceContain), typeof(Reference), typeof(AvalonEditBehaviour),
-            new FrameworkPropertyMetadata(default(string), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, ReferenceContainPropertyChangedCallback));
+            new FrameworkPropertyMetadata(default(Reference), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, ReferenceContainPropertyChangedCallback));
 
         public string TextContain
         {
