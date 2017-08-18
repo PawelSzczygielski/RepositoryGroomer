@@ -56,7 +56,7 @@ namespace RepositoryGroomer.Modern.Tests
             return new ProjectFileInfo("FP" + suffix, "DP" + suffix, "PN" + suffix, 
                 new List<LinkedFileInfo>
                 {
-                    new LinkedFileInfo("FRP" + random, LinkTagTypes.Compile, "UP"+random, false)
+                    new LinkedFileInfo(String.Empty, "FRP" + random, LinkTagTypes.Compile, "UP"+random, false)
                 },
                 new List<Reference>(), true);
 

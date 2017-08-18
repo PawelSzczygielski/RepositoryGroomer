@@ -185,7 +185,21 @@ namespace RepositoryGroomer.Modern
                     return;
 
                 _selectedReference = value;
-                NotifyOfPropertyChange(()=>SelectedReference);
+                NotifyOfPropertyChange(() => SelectedReference);
+            }
+        }
+
+        private LinkedFileInfo _selectedLinkedFile;
+        public LinkedFileInfo SelectedLinkedFile
+        {
+            get { return _selectedLinkedFile; }
+            set
+            {
+                if (value == _selectedLinkedFile)
+                    return;
+
+                _selectedLinkedFile = value;
+                NotifyOfPropertyChange(() => SelectedLinkedFile);
             }
         }
 
@@ -195,11 +209,16 @@ namespace RepositoryGroomer.Modern
             SelectedReference = selectedReference;
         }
 
+        public void SelectedLinkedFileChanged(LinkedFileInfo selectedLinkedFile)
+        {
+            SelectedLinkedFile = selectedLinkedFile;
+        }
+
         public void SelectedProjectChanged(ProjectFileInfo selectedProject)
         {
             SelectedProject = selectedProject;
         }
 
-      
+
     }
 }

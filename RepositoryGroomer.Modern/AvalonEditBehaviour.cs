@@ -15,6 +15,11 @@ namespace RepositoryGroomer.Modern
         public static readonly DependencyProperty ReferenceContainProperty = DependencyProperty.Register(nameof(ReferenceContain), typeof(Reference), typeof(AvalonEditBehaviour),
             new FrameworkPropertyMetadata(default(Reference), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, ReferenceContainPropertyChangedCallback));
 
+        public static readonly DependencyProperty LinkedFileProperty = DependencyProperty.Register(nameof(LinkedFile),
+            typeof(LinkedFileInfo), typeof(AvalonEditBehaviour),
+            new FrameworkPropertyMetadata(default(LinkedFileInfo), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
+                LinkedFilePropertyChangedCallback));
+
         public string TextContain
         {
             get { return (string)GetValue(TextContainProperty); }
@@ -26,7 +31,11 @@ namespace RepositoryGroomer.Modern
             get { return (Reference)GetValue(ReferenceContainProperty); }
             set { SetValue(ReferenceContainProperty, value); }
         }
-
+        public LinkedFileInfo LinkedFile
+        {
+            get { return (LinkedFileInfo)GetValue(LinkedFileProperty); }
+            set { SetValue(LinkedFileProperty, value); }
+        }
         protected override void OnAttached()
         {
             base.OnAttached();
@@ -72,10 +81,25 @@ namespace RepositoryGroomer.Modern
                 var indexof = editor.Document.Text.IndexOf(reference.Include) - 20;
                 if (indexof > -1)
                     editor.Select(indexof, reference.OriginalXml.Length + 16);
-                
-                editor.ScrollToLine(editor.TextArea.TextView.HighlightedLine);
 
-                //jeszcze trzeba przejechac do selekcji, a do tego najpierw zmieniamy xml przy zaznaczaniu referencji.
+                editor.ScrollToLine(editor.TextArea.TextView.HighlightedLine);
+            }
+        }
+
+        private static void LinkedFilePropertyChangedCallback(
+            DependencyObject dependencyObject,
+            DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
+        {
+            var behavior = dependencyObject as AvalonEditBehaviour;
+            var editor = behavior?.AssociatedObject;
+            if (editor?.Document != null)
+            {
+                var linkedFile = (LinkedFileInfo) dependencyPropertyChangedEventArgs.NewValue;
+                var indexofStart = editor.Document.Text.IndexOf(linkedFile.LinkedFileRelativePath) - 20;
+                if (indexofStart > -1)
+                    editor.Select(indexofStart, linkedFile.OriginalXml.Length + 16);
+
+                editor.ScrollToLine(editor.TextArea.TextView.HighlightedLine);
             }
         }
     }

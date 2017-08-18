@@ -64,11 +64,13 @@
                         </ListView.Resources>
                         <ListView.ItemTemplate>
                             <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
+                                <StackPanel Orientation="Horizontal"
+                                            cal:Message.Attach="[Event PreviewMouseDown] = [Action SelectedLinkedFileChanged($dataContext)]">
 
                                     <Image Source="Resources/broken-link-16.png"
-                                           Visibility="{Binding TargetLinkedFileExists, Converter={StaticResource InvertedBooleanToVisibilityConverter}}" />
+                                           Visibility="{Binding TargetLinkedFileExists, Converter={StaticResource InvertedBooleanToVisibilityConverter}}"/>
                                     <TextBlock Text="{Binding LinkedFileUnwrappedPath}" />
+                                    
                                 </StackPanel>
                             </DataTemplate>
                         </ListView.ItemTemplate>
@@ -186,7 +188,8 @@
                 <i:Interaction.Behaviors>
                     <modern:AvalonEditBehaviour
                         TextContain="{Binding ProjectXmlContain, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                        ReferenceContain="{Binding SelectedReference, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        ReferenceContain="{Binding SelectedReference, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        LinkedFile="{Binding SelectedLinkedFile, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 </i:Interaction.Behaviors>
             </avalonedit:TextEditor>
         </Grid>

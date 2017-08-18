@@ -124,7 +124,7 @@ namespace RepositoryGroomer.Core
         {
             var parent = element?.Parent;
             if(parent == null)
-                return new LinkedFileInfo(string.Empty, LinkTagTypes.Unknown, string.Empty, false);
+                return new LinkedFileInfo(element.StripNamespaces().ToString(), string.Empty, LinkTagTypes.Unknown, string.Empty, false);
 
             var linkedFileRelativePath = parent.Attribute("Include")?.Value;
             var linkTagParentName = parent.Name.LocalName;
@@ -132,7 +132,7 @@ namespace RepositoryGroomer.Core
             var linkedFileUnwrappedPath = UnwrapRelativePath(containingDirectoryPath, linkedFileRelativePath);
             var targetLinkedFileExists = File.Exists(linkedFileUnwrappedPath);
 
-            return new LinkedFileInfo(linkedFileRelativePath, linkTagType, linkedFileUnwrappedPath,
+            return new LinkedFileInfo(parent.StripNamespaces().ToString(), linkedFileRelativePath, linkTagType, linkedFileUnwrappedPath,
                 targetLinkedFileExists);
         }
 
