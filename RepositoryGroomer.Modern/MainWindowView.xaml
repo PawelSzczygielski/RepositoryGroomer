@@ -64,13 +64,13 @@
                         </ListView.Resources>
                         <ListView.ItemTemplate>
                             <DataTemplate>
-                                <StackPanel Orientation="Horizontal"
+                                <StackPanel Orientation="Horizontal"  Background="Transparent"
                                             cal:Message.Attach="[Event PreviewMouseDown] = [Action SelectedLinkedFileChanged($dataContext)]">
 
                                     <Image Source="Resources/broken-link-16.png"
                                            Visibility="{Binding TargetLinkedFileExists, Converter={StaticResource InvertedBooleanToVisibilityConverter}}"/>
                                     <TextBlock Text="{Binding LinkedFileUnwrappedPath}" />
-                                    
+
                                 </StackPanel>
                             </DataTemplate>
                         </ListView.ItemTemplate>
@@ -95,7 +95,7 @@
                         </ListView.ItemContainerStyle>
                         <ListView.ItemTemplate>
                             <DataTemplate>
-                                <StackPanel Orientation="Horizontal"
+                                <StackPanel Orientation="Horizontal" Background="Transparent"
                                             Visibility="{Binding ReferenceEntryValid, Converter={StaticResource InvertedBooleanToVisibilityConverter}}"
                                             cal:Message.Attach="[Event PreviewMouseDown] = [Action SelectedReferenceChanged($dataContext)]">
 

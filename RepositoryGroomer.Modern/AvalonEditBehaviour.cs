@@ -81,6 +81,10 @@ namespace RepositoryGroomer.Modern
                 var indexof = editor.Document.Text.IndexOf(reference.Include) - 20;
                 if (indexof > -1)
                     editor.Select(indexof, reference.OriginalXml.Length + 16);
+                else
+                {
+                    //Intentionally left blank
+                }
 
                 editor.ScrollToLine(editor.TextArea.TextView.HighlightedLine);
             }

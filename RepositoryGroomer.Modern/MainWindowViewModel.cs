@@ -181,9 +181,6 @@ namespace RepositoryGroomer.Modern
             get { return _selectedReference; }
             set
             {
-                if (value == _selectedReference)
-                    return;
-
                 _selectedReference = value;
                 NotifyOfPropertyChange(() => SelectedReference);
             }
@@ -195,9 +192,6 @@ namespace RepositoryGroomer.Modern
             get { return _selectedLinkedFile; }
             set
             {
-                if (value == _selectedLinkedFile)
-                    return;
-
                 _selectedLinkedFile = value;
                 NotifyOfPropertyChange(() => SelectedLinkedFile);
             }
